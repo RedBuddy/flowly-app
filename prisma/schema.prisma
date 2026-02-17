@@ -14,15 +14,28 @@ datasource db {
 }
 
 model User {
-  id            String    @id
-  name          String
-  email         String
-  emailVerified Boolean   @default(false)
-  image         String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  sessions      Session[]
-  accounts      Account[]
+  id              String               @id
+  name            String
+  email           String
+  emailVerified   Boolean              @default(false)
+  image           String?
+  createdAt       DateTime             @default(now())
+  updatedAt       DateTime             @updatedAt
+  sessions        Session[]
+  accounts        Account[]
+  // App fields
+  fullName        String?              @map("full_name")
+  totalMoney      Decimal              @default(0) @map("total_money") @db.Decimal(12, 2)
+  unassignedMoney Decimal              @default(0) @map("unassigned_money") @db.Decimal(12, 2)
+  // Relations
+  budgets         Budget[]
+  debts           Debt[]
+  goals           Goal[]
+  incomes         Income[]
+  alerts          Alert[]
+  budgetTransactions BudgetTransaction[]
+  debtPayments    DebtPayment[]
+  goalContributions GoalContribution[]
 
   @@unique([email])
   @@map("user")
@@ -74,4 +87,127 @@ model Verification {
 
   @@index([identifier])
   @@map("verification")
+}
+
+model Budget {
+  id            String              @id @default(cuid())
+  userId        String              @map("user_id")
+  name          String
+  type          String              // recurrent | project
+  totalAssigned Decimal             @default(0) @map("total_assigned") @db.Decimal(12, 2)
+  spent         Decimal             @default(0) @db.Decimal(12, 2)
+  createdAt     DateTime            @default(now()) @map("created_at")
+  user          User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  transactions  BudgetTransaction[]
+
+  @@index([userId])
+  @@map("budgets")
+}
+
+model BudgetTransaction {
+  id          String   @id @default(cuid())
+  budgetId    String   @map("budget_id")
+  userId      String   @map("user_id")
+  amount      Decimal  @db.Decimal(12, 2)
+  description String?
+  type        String   // expense | assignment
+  date        DateTime @default(now())
+  createdAt   DateTime @default(now()) @map("created_at")
+  budget      Budget   @relation(fields: [budgetId], references: [id], onDelete: Cascade)
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([budgetId])
+  @@index([userId])
+  @@map("budget_transactions")
+}
+
+model Debt {
+  id             String        @id @default(cuid())
+  userId         String        @map("user_id")
+  name           String
+  totalDebt      Decimal       @map("total_debt") @db.Decimal(12, 2)
+  remaining      Decimal       @db.Decimal(12, 2)
+  minimumPayment Decimal       @default(0) @map("minimum_payment") @db.Decimal(12, 2)
+  dueDate        DateTime?     @map("due_date") @db.Date
+  priority       String        // high | medium | low
+  createdAt      DateTime      @default(now()) @map("created_at")
+  user           User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  payments       DebtPayment[]
+
+  @@index([userId])
+  @@map("debts")
+}
+
+model DebtPayment {
+  id          String   @id @default(cuid())
+  debtId      String   @map("debt_id")
+  userId      String   @map("user_id")
+  amount      Decimal  @db.Decimal(12, 2)
+  description String?
+  date        DateTime @default(now())
+  createdAt   DateTime @default(now()) @map("created_at")
+  debt        Debt     @relation(fields: [debtId], references: [id], onDelete: Cascade)
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([debtId])
+  @@index([userId])
+  @@map("debt_payments")
+}
+
+model Goal {
+  id            String             @id @default(cuid())
+  userId        String             @map("user_id")
+  name          String
+  target        Decimal            @db.Decimal(12, 2)
+  current       Decimal            @default(0) @db.Decimal(12, 2)
+  deadline      DateTime?          @db.Date
+  createdAt     DateTime           @default(now()) @map("created_at")
+  user          User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  contributions GoalContribution[]
+
+  @@index([userId])
+  @@map("goals")
+}
+
+model GoalContribution {
+  id          String   @id @default(cuid())
+  goalId      String   @map("goal_id")
+  userId      String   @map("user_id")
+  amount      Decimal  @db.Decimal(12, 2)
+  description String?
+  date        DateTime @default(now())
+  createdAt   DateTime @default(now()) @map("created_at")
+  goal        Goal     @relation(fields: [goalId], references: [id], onDelete: Cascade)
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([goalId])
+  @@index([userId])
+  @@map("goal_contributions")
+}
+
+model Income {
+  id          String   @id @default(cuid())
+  userId      String   @map("user_id")
+  amount      Decimal  @db.Decimal(12, 2)
+  description String?
+  date        DateTime @default(now())
+  createdAt   DateTime @default(now()) @map("created_at")
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("incomes")
+}
+
+model Alert {
+  id        String   @id @default(cuid())
+  userId    String   @map("user_id")
+  type      String   // debt | budget | goal
+  title     String
+  message   String
+  isRead    Boolean  @default(false) @map("is_read")
+  createdAt DateTime @default(now()) @map("created_at")
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("alerts")
 }

@@ -1,7 +1,5 @@
 import { AppHeader } from "@/components/main/app-header";
-import Index from "./(site)/Index";
 import { BudgetSlider, HeroSection, ProjectSlider } from "@/components/main";
-import { ProjectCard } from "@/components/ProjectCard";
 import { DebtSlider } from "@/components/main/debts-slider";
 
 export default function HomePage() {

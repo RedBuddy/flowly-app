@@ -1,6 +1,7 @@
 import { Wallet, Bell } from "lucide-react";
 import { ModeToggle } from "../theme/toggle-theme";
 import { NotificationMenu } from "../modal";
+import { SignOutButton } from "../auth/sign-out-button";
 
 export const AppHeader = () => {
   return (
@@ -20,6 +21,7 @@ export const AppHeader = () => {
             </button> */}
             <NotificationMenu />
             <ModeToggle />
+            <SignOutButton />
           </div>
         </div>
       </div>

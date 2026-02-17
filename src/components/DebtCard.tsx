@@ -15,20 +15,12 @@ interface DebtCardProps {
 }
 
 const priorityStyles: Record<Priority, { accent: string; bg: string; text: string }> = {
-  high: { accent: "bg-debt", bg: "bg-debt/10", text: "text-debt" },
-  medium: { accent: "bg-warning", bg: "bg-warning/10", text: "text-warning" },
+  high: { accent: "bg-destructive", bg: "bg-destructive/10", text: "text-destructive" },
+  medium: { accent: "bg-accent", bg: "bg-accent", text: "text-accent-foreground" },
   low: { accent: "bg-primary", bg: "bg-primary/10", text: "text-primary" },
 };
 
-export function DebtCard({
-  name,
-  totalDebt,
-  remaining,
-  dueDate,
-  minimumPayment,
-  priority,
-  onPay,
-}: DebtCardProps) {
+export function DebtCard({ name, totalDebt, remaining, dueDate, minimumPayment, priority, onPay }: DebtCardProps) {
   const progress = totalDebt > 0 ? ((totalDebt - remaining) / totalDebt) * 100 : 0;
   const styles = priorityStyles[priority];
 
@@ -43,10 +35,7 @@ export function DebtCard({
   const isUrgent = priority === "high";
 
   return (
-    <div className={cn(
-      "relative bg-card rounded-2xl p-5 shadow-soft border overflow-hidden hover:shadow-card transition-all duration-300 animate-scale-in",
-      isUrgent ? "border-debt/30" : "border-border/50"
-    )}>
+    <div className={cn("relative bg-card rounded-2xl p-5 shadow-soft border overflow-hidden hover:shadow-card transition-all duration-300 animate-scale-in", isUrgent ? "border-destructive/30" : "border-border/50")}>
       {/* Priority accent bar */}
       <div className={cn("absolute top-0 left-0 right-0 h-1", styles.accent)} />
 
@@ -59,18 +48,13 @@ export function DebtCard({
             <h3 className="font-semibold text-foreground text-lg">{name}</h3>
             <div className="flex items-center gap-2 mt-1">
               <Calendar className="w-4 h-4 text-muted-foreground" />
-              <span className={cn(
-                "text-sm font-medium",
-                isUrgent ? "text-debt" : "text-muted-foreground"
-              )}>
-                Vence: {dueDate}
-              </span>
+              <span className={cn("text-sm font-medium", isUrgent ? "text-destructive" : "text-muted-foreground")}>Vence: {dueDate}</span>
             </div>
           </div>
         </div>
         {isUrgent && (
-          <div className="p-2 rounded-xl bg-debt/10">
-            <AlertCircle className="w-5 h-5 text-debt" />
+          <div className="p-2 rounded-xl bg-destructive/10">
+            <AlertCircle className="w-5 h-5 text-destructive" />
           </div>
         )}
       </div>
@@ -82,10 +66,7 @@ export function DebtCard({
           <span className="font-medium text-foreground">{Math.round(progress)}%</span>
         </div>
         <div className="h-2 rounded-full bg-muted overflow-hidden">
-          <div
-            className={cn("h-full rounded-full transition-all duration-500", styles.accent)}
-            style={{ width: `${progress}%` }}
-          />
+          <div className={cn("h-full rounded-full transition-all duration-500", styles.accent)} style={{ width: `${progress}%` }} />
         </div>
       </div>
 
@@ -93,15 +74,11 @@ export function DebtCard({
       <div className="grid grid-cols-2 gap-3 mb-4">
         <div className={cn("p-3 rounded-xl", styles.bg)}>
           <p className="text-xs text-muted-foreground mb-1">Por pagar</p>
-          <p className={cn("text-xl font-bold", styles.text)}>
-            {formatCurrency(remaining)}
-          </p>
+          <p className={cn("text-xl font-bold", styles.text)}>{formatCurrency(remaining)}</p>
         </div>
         <div className="p-3 rounded-xl bg-muted/50">
           <p className="text-xs text-muted-foreground mb-1">Pago mínimo</p>
-          <p className="text-xl font-bold text-foreground">
-            {formatCurrency(minimumPayment)}
-          </p>
+          <p className="text-xl font-bold text-foreground">{formatCurrency(minimumPayment)}</p>
         </div>
       </div>
 
@@ -109,9 +86,7 @@ export function DebtCard({
         onClick={onPay}
         className={cn(
           "w-full rounded-xl font-semibold transition-all hover:scale-[1.02] active:scale-[0.98]",
-          isUrgent
-            ? "bg-debt hover:bg-debt/90 text-debt-foreground"
-            : "bg-primary hover:bg-primary/90 text-primary-foreground"
+          isUrgent ? "bg-destructive hover:bg-destructive/90 text-destructive-foreground" : "bg-primary hover:bg-primary/90 text-primary-foreground"
         )}
       >
         Abonar ahora

@@ -40,24 +40,18 @@ export function AlertCard({ type, title, message, actionLabel, onAction }: Alert
   const Icon = alertIcons[type];
 
   return (
-    <div
-      className={cn(
-        "flex items-center gap-4 p-4 rounded-2xl border transition-all hover:shadow-soft cursor-pointer animate-slide-up",
-        styles.bg
-      )}
-      onClick={onAction}
-    >
+    <div className={cn("flex items-center gap-4 p-4 rounded-2xl border transition-all hover:shadow-soft cursor-pointer animate-slide-up", styles.bg)} onClick={onAction}>
       <div className={cn("p-3 rounded-xl", styles.iconBg)}>
         <Icon className={cn("w-5 h-5", styles.icon)} />
       </div>
-      
+
       <div className="flex-1 min-w-0">
         <p className="font-semibold text-foreground text-sm">{title}</p>
         <p className="text-sm text-muted-foreground truncate">{message}</p>
       </div>
 
       {actionLabel && (
-        <button className="flex items-center gap-1 text-sm font-medium text-primary hover:underline whitespace-nowrap">
+        <button className="flex items-center gap-1 text-sm font-medium text-primary hover:underline whitespace-nowrap cursor-pointer">
           {actionLabel}
           <ChevronRight className="w-4 h-4" />
         </button>

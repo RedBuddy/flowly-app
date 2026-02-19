@@ -36,7 +36,7 @@ export default function RegisterPage() {
       try {
         const response = await signUpAction(data);
 
-        if (!response.success) {
+        if (!response.ok) {
           // Mostrar error en email si es duplicado, sino en root
           if (response.error.includes("correo")) {
             setError("email", { message: response.error });

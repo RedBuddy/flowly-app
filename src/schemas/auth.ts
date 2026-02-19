@@ -8,9 +8,8 @@ export const registerSchema = z
       .max(50, "El nombre no puede exceder 50 caracteres")
       .regex(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/, "El nombre solo puede contener letras y espacios"),
     email: z
-      .string()
-      .min(1, "El correo es requerido")
       .email("Por favor ingresa un correo válido")
+      .min(1, "El correo es requerido")
       .max(100, "El correo no puede exceder 100 caracteres"),
     password: z
       .string()
@@ -30,9 +29,8 @@ export type RegisterFormData = z.infer<typeof registerSchema>;
 
 export const loginSchema = z.object({
   email: z
-    .string()
-    .min(1, "El correo es requerido")
-    .email("Por favor ingresa un correo válido"),
+    .email("Por favor ingresa un correo válido")
+    .min(1, "El correo es requerido"),
   password: z.string().min(1, "La contraseña es requerida"),
 });
 

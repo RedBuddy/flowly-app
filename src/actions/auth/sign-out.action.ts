@@ -1,14 +1,12 @@
 'use server';
 
 import { auth } from "@/lib/auth";
+import { ActionResponse } from "@/types/action-response.type";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
-type SignOutResponse =
-  | { success: true }
-  | { success: false; error: string };
 
-export const signOutAction = async (): Promise<SignOutResponse> => {
+export const signOutAction = async (): Promise<ActionResponse> => {
   try {
     await auth.api.signOut({
       headers: await headers()
@@ -26,13 +24,13 @@ export const signOutAction = async (): Promise<SignOutResponse> => {
 
       // Error de conexión
       if (error.message.includes('network') || error.message.includes('fetch')) {
-        return { success: false, error: 'Error de conexión. Intenta de nuevo.' };
+        return { ok: false, error: 'Error de conexión. Intenta de nuevo.' };
       }
 
       // Error genérico
-      return { success: false, error: 'Error al cerrar sesión' };
+      return { ok: false, error: 'Error al cerrar sesión' };
     }
 
-    return { success: false, error: 'Error inesperado' };
+    return { ok: false, error: 'Error inesperado' };
   }
 }

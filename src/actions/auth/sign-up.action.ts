@@ -2,17 +2,17 @@
 
 import { auth } from "@/lib/auth";
 import { RegisterFormData } from "@/schemas/auth";
+import { ActionResponse } from "@/types/action-response.type";
 
-type SignUpResponse =
-  | { success: true }
-  | { success: false; error: string };
 
-export const signUpAction = async (data: RegisterFormData): Promise<SignUpResponse> => {
+
+export const signUpAction = async (data: RegisterFormData): Promise<ActionResponse> => {
   try {
     await auth.api.signUpEmail({
       body: data
     })
-    return { success: true };
+    return { ok: true };
+
   } catch (error) {
     console.error('Sign up error:', error);
 
@@ -20,15 +20,15 @@ export const signUpAction = async (data: RegisterFormData): Promise<SignUpRespon
     if (error instanceof Error) {
       // Errores de validación o email duplicado
       if (error.message.includes('already exists')) {
-        return { success: false, error: 'El correo ya está registrado' };
+        return { ok: false, error: 'El correo ya está registrado' };
       }
       if (error.message.includes('invalid')) {
-        return { success: false, error: 'Datos inválidos' };
+        return { ok: false, error: 'Datos inválidos' };
       }
 
-      return { success: false, error: error.message };
+      return { ok: false, error: error.message };
     }
 
-    return { success: false, error: 'Error al crear la cuenta. Intenta de nuevo.' };
+    return { ok: false, error: 'Error al crear la cuenta. Intenta de nuevo.' };
   }
 }

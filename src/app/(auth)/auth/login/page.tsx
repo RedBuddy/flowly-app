@@ -34,7 +34,7 @@ export default function LoginPage() {
       try {
         const response = await signInAction(data);
 
-        if (!response.success) {
+        if (!response.ok) {
           setError("root", { message: response.error });
           return;
         }

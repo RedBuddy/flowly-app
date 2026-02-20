@@ -2,16 +2,11 @@ import { z } from "zod";
 
 import { dateSchema, idSchema } from "./_shared";
 
-export const verificationBaseSchema = z.object({
+export const verificationCreateSchema = z.object({
   id: idSchema,
   identifier: z.string().min(1),
   value: z.string().min(1),
   expiresAt: dateSchema,
-  createdAt: dateSchema,
-  updatedAt: dateSchema,
-});
-
-export const verificationCreateSchema = verificationBaseSchema.extend({
   createdAt: dateSchema.optional(),
   updatedAt: dateSchema.optional(),
 });

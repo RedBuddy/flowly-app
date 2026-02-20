@@ -1,16 +1,6 @@
 import { z } from "zod";
 
-import { dateSchema, idSchema, moneySchema } from "./_shared";
-
-export const debtPaymentBaseSchema = z.object({
-  id: idSchema,
-  debtId: idSchema,
-  userId: idSchema,
-  amount: moneySchema,
-  description: z.string().nullable(),
-  date: dateSchema,
-  createdAt: dateSchema,
-});
+import { idSchema, moneySchema } from "./_shared";
 
 export const debtPaymentCreateSchema = z.object({
   debtId: idSchema,

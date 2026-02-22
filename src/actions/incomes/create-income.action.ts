@@ -17,7 +17,7 @@ export async function CreateIncomeAction(data: IncomeFormData): Promise<ActionRe
       data: { ...data, userId }
     });
 
-    return { ok: true, data: income };
+    return { ok: true, result: income };
   } catch (error) {
     return { ok: false, error: "Error al crear el ingreso" };
   }

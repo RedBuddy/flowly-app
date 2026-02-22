@@ -4,9 +4,9 @@ import prisma from "@/lib/prisma";
 import { ActionResponse } from "@/types/action-response.type";
 import { BudgetFormData } from "@/schemas/prisma";
 import { getUserId } from "@/actions/auth/get-user-id";
-import { Prisma } from "@/generated/prisma/client";
+import { Budget } from "@/generated/prisma/client";
 
-export async function CreateBudgetAction(data: BudgetFormData): Promise<ActionResponse<Prisma.BudgetGetPayload<{}>>> {
+export async function CreateBudgetAction(data: BudgetFormData): Promise<ActionResponse<Budget>> {
   try {
     const userId = await getUserId();
 
@@ -19,7 +19,7 @@ export async function CreateBudgetAction(data: BudgetFormData): Promise<ActionRe
     });
 
 
-    return { ok: true, data: budget };
+    return { ok: true, result: budget };
   } catch (error) {
     console.error("Error al crear presupuesto:", error);
     return {

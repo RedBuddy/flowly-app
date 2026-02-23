@@ -10,9 +10,8 @@ import { PaginatedResponseType } from "@/schemas/pagination";
 import { useQuery } from "@tanstack/react-query";
 import { useQueryState } from "nuqs";
 
-export const BudgetGrid = (result: PaginatedResponseType<Budget>) => {
-  // const [filter] = useQueryState("filter", { defaultValue: "all" });
-  const { data, isLoading } = useBudgets(result);
+export const BudgetGrid = () => {
+  const { data, isLoading } = useBudgets();
 
   const budgetList = data?.ok ? data.result?.data : [];
 

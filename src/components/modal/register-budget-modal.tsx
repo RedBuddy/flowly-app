@@ -1,15 +1,12 @@
 "use client";
 
-import { useTransition } from "react";
 import { Plus, X, PiggyBank } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { budgetCreateSchema, BudgetFormData, BUDGET_TYPES, BUDGET_TYPE_LABELS } from "@/schemas/prisma";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
-import { CreateBudgetAction } from "@/actions/budgets/create-budget.action";
-import { useQueryClient } from "@tanstack/react-query";
+import { useCreateBudget } from "@/hooks/useBudget";
 
 interface RegisterBudgetModalProps {
   isOpen: boolean;
@@ -17,9 +14,7 @@ interface RegisterBudgetModalProps {
 }
 
 export function RegisterBudgetModal({ isOpen, onClose }: RegisterBudgetModalProps) {
-  const [isPending, startTransition] = useTransition();
-  const router = useRouter();
-  const queryClient = useQueryClient();
+  const { mutateAsync, isPending } = useCreateBudget();
 
   const {
     register,
@@ -38,26 +33,21 @@ export function RegisterBudgetModal({ isOpen, onClose }: RegisterBudgetModalProp
 
   if (!isOpen) return null;
 
-  const onSubmit: SubmitHandler<BudgetFormData> = (data) => {
-    startTransition(async () => {
-      try {
-        const response = await CreateBudgetAction(data);
+  const onSubmit: SubmitHandler<BudgetFormData> = async (data) => {
+    try {
+      const response = await mutateAsync(data);
 
-        if (!response.ok) {
-          setError("root", { message: response.error });
-          return;
-        }
-
-        // Invalida el cache para refetch los budgets
-        await queryClient.invalidateQueries({ queryKey: ["budgets"] });
-
-        onClose();
-        reset();
-      } catch (error) {
-        console.error("Error al registrar presupuesto:", error);
-        setError("root", { message: "Error inesperado al registrar el presupuesto" });
+      if (!response.ok) {
+        setError("root", { message: response.error });
+        return;
       }
-    });
+
+      onClose();
+      reset();
+    } catch (error) {
+      console.error("Error al registrar presupuesto:", error);
+      setError("root", { message: "Error inesperado al registrar el presupuesto" });
+    }
   };
 
   return (

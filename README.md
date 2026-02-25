@@ -1,36 +1,179 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 💰 Flowly - Gestor de Finanzas Personales
 
-## Getting Started
+Una aplicación moderna de gestión de finanzas personales construida con Next.js. Diseñada para ayudarte a controlar tus presupuestos, deudas, ingresos y metas de ahorro de forma sencilla e intuitiva.
 
-First, run the development server:
+## ✨ Características
+
+- 💵 **Gestión de Presupuestos**: Crea presupuestos recurrentes o para proyectos específicos
+- 📊 **Tracking de Gastos**: Registra tus gastos y monitorea el progreso
+- 💳 **Gestión de Deudas**: Controla tus deudas, pagos y fechas de vencimiento
+- 🎯 **Metas de Ahorro**: Establece objetivos financieros y monitorea tu progreso
+- 💰 **Registro de Ingresos**: Documenta todas tus fuentes de ingresos
+- 🔔 **Alertas Inteligentes**: Recibe notificaciones sobre presupuestos excedidos y deudas
+- 🌙 **Dark Mode**: Interfaz adaptable a tu preferencia de tema
+- 🔐 **Autenticación Segura**: Sistema de autenticación con Better Auth
+
+## 🏗️ Stack Tecnológico
+
+- **Framework**: [Next.js 16](https://nextjs.org/) (App Router)
+- **Base de Datos**: [PostgreSQL](https://www.postgresql.org/) con [Prisma 7](https://www.prisma.io/)
+- **Autenticación**: [Better Auth](https://www.better-auth.com/)
+- **State Management**: [Zustand](https://github.com/pmndrs/zustand)
+- **Data Fetching**: [TanStack Query v5](https://tanstack.com/query/latest)
+- **Styles**: [Tailwind CSS 4](https://tailwindcss.com/)
+- **UI Components**: [Radix UI](https://www.radix-ui.com/) + [shadcn/ui](https://ui.shadcn.com/)
+- **Formularios**: [React Hook Form](https://react-hook-form.com/) + [Zod](https://zod.dev/)
+- **Language**: [TypeScript](https://www.typescriptlang.org/) (strict mode)
+
+## 📋 Requisitos Previos
+
+- Node.js 18+
+- pnpm 8+ (recomendado)
+- PostgreSQL 12+
+
+## 🚀 Instalación y Setup
+
+### 1. Clonar el repositorio
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone <repository-url>
+cd flowly-app
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. Instalar dependencias
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+pnpm install
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 3. Configurar variables de entorno
 
-## Learn More
+Crea un archivo `.env.local` en la raíz del proyecto:
 
-To learn more about Next.js, take a look at the following resources:
+```env
+# Database
+DATABASE_URL="postgresql://user:password@localhost:5432/flowly"
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+# Auth - Better Auth
+BETTER_AUTH_SECRET="your-secret-key-here"
+BETTER_AUTH_URL="http://localhost:3000"
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+# Optional: OAuth providers
+GITHUB_CLIENT_ID=""
+GITHUB_CLIENT_SECRET=""
+```
 
-## Deploy on Vercel
+### 4. Configurar base de datos
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+# Crear y aplicar migraciones
+pnpm prisma migrate dev
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+# (Opcional) Seed de datos de prueba
+pnpm seed
+```
+
+## 📖 Desarrollo
+
+### Iniciar servidor de desarrollo
+
+```bash
+pnpm dev
+```
+
+Abre [http://localhost:3000](http://localhost:3000) en tu navegador.
+
+### Ver/editar datos en BD
+
+```bash
+pnpm prisma studio
+```
+
+### Linting
+
+```bash
+pnpm lint
+```
+
+## 📦 Scripts Disponibles
+
+| Script                      | Descripción                             |
+| --------------------------- | --------------------------------------- |
+| `pnpm dev`                  | Inicia servidor de desarrollo           |
+| `pnpm build`                | Construye la aplicación para producción |
+| `pnpm start`                | Inicia servidor de producción           |
+| `pnpm lint`                 | Ejecuta ESLint                          |
+| `pnpm seed`                 | Ejecuta script de seeding               |
+| `pnpm prisma studio`        | Abre Prisma Studio                      |
+| `pnpm prisma migrate dev`   | Crea nueva migración                    |
+| `pnpm prisma migrate reset` | Reset de BD (solo desarrollo)           |
+
+## 📁 Estructura del Proyecto
+
+```
+src/
+├── app/                    # Next.js App Router
+│   ├── (auth)/            # Rutas de autenticación
+│   ├── (private)/         # Rutas protegidas
+│   ├── (site)/            # Rutas públicas
+│   │   ├── budgets/
+│   │   ├── debts/
+│   │   └── goals/
+│   └── api/
+├── actions/               # Server Actions
+│   ├── auth/
+│   ├── budgets/
+│   └── incomes/
+├── components/            # Componentes React
+│   ├── ui/               # Componentes base
+│   ├── main/             # Componentes principales
+│   ├── modal/            # Modales
+│   └── providers/        # Context/Providers
+├── hooks/                 # Custom Hooks
+├── lib/                   # Utilidades core
+├── schemas/              # Esquemas Zod
+├── stores/               # Zustand stores
+├── types/                # Tipos TypeScript
+└── helpers/              # Funciones auxiliares
+
+prisma/
+├── schema.prisma         # Definición de modelos
+├── migrations/           # Historial de migraciones
+└── seed.ts              # Script de seeding
+```
+
+## 📊 Modelos de Base de Datos
+
+- **User**: Usuario con información de finanzas
+- **Budget**: Presupuestos recurrentes o por proyecto
+- **BudgetTransaction**: Transacciones de presupuestos
+- **Debt**: Deudas registradas
+- **DebtPayment**: Pagos de deudas
+- **Goal**: Metas de ahorro
+- **GoalContribution**: Contribuciones a metas
+- **Income**: Registros de ingresos
+- **Alert**: Notificaciones y alertas
+
+## 📚 Documentación Interna
+
+Para información detallada sobre convenciones, patrones y guías de desarrollo, consulta [CLAUDE.md](./CLAUDE.md).
+
+## 🤝 Contribuir
+
+1. Fork el proyecto
+2. Crea una rama para tu feature (`git checkout -b feature/mi-feature`)
+3. Commit tus cambios (`git commit -am 'Agrego mi feature'`)
+4. Push a la rama (`git push origin feature/mi-feature`)
+5. Abre un Pull Request
+
+## 👤 Autor
+
+**Orlando Armando Apodaca Concha**
+
+## 📄 Licencia
+
+Este proyecto está bajo la Licencia MIT.
+
+---
+
+Hecho con ❤️ para simplificar tu gestión financiera

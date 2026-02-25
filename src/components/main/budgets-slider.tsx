@@ -1,5 +1,5 @@
 import { PiggyBank } from "lucide-react";
-import { BudgetCard } from "../BudgetCard";
+import { BudgetCard } from "../../app/(site)/budgets/_components/budget-card";
 import { SectionHeader } from "../SectionHeader";
 import { redirect } from "next/navigation";
 

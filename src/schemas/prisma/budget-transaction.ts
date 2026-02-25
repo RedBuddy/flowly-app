@@ -14,3 +14,6 @@ export const budgetTransactionUpdateSchema = budgetTransactionCreateSchema.parti
 
 export type BudgetTransactionFormData = z.infer<typeof budgetTransactionCreateSchema>;
 
+export const transactionFormSchema = budgetTransactionCreateSchema.omit({ budgetId: true });
+export type TransactionFormData = z.infer<typeof transactionFormSchema>;
+

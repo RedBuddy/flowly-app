@@ -1,41 +1,36 @@
+"use client";
 import { MoreHorizontal, Plus, Receipt } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-
-type BudgetType = "recurrent" | "project";
+import { formatCurrency } from "@/helpers/currency-formatter";
+import { useBudgetModalsStore } from "@/stores/budget-modals.store";
+import { BUDGET_TYPES } from "@/schemas/prisma";
 
 interface BudgetCardProps {
+  id: string;
   name: string;
-  type: BudgetType;
+  type: (typeof BUDGET_TYPES)[keyof typeof BUDGET_TYPES];
   spent: number;
   total: number;
   available: number;
-  onSpend?: () => void;
-  onAssign?: () => void;
 }
 
-export function BudgetCard({ name, type, spent, total, available, onSpend, onAssign }: BudgetCardProps) {
+export function BudgetCard({ id, name, type, spent, total, available }: BudgetCardProps) {
+  const { switchSpendModal, switchAssignModal, switchHistoryModal } = useBudgetModalsStore();
+
   const progress = total > 0 ? (spent / total) * 100 : 0;
   const isLow = available < total * 0.2;
-
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat("es-MX", {
-      style: "currency",
-      currency: "MXN",
-      minimumFractionDigits: 0,
-    }).format(amount);
-  };
 
   return (
     <div className="group relative bg-card rounded-2xl p-5 shadow-soft border border-border/50 hover:shadow-card transition-all duration-300 animate-scale-in">
       <div className="flex items-start justify-between mb-4">
         <div>
           <h3 className="font-semibold text-foreground text-lg">{name}</h3>
-          <span className={cn("inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium mt-1", type === "recurrent" ? "bg-secondary text-secondary-foreground" : "bg-accent text-accent-foreground")}>
-            {type === "recurrent" ? "Recurrente" : "Proyecto"}
+          <span className={cn("inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium mt-1", type === BUDGET_TYPES.RECURRENT ? "bg-secondary text-secondary-foreground" : "bg-accent text-accent-foreground")}>
+            {type === BUDGET_TYPES.RECURRENT ? "Recurrente" : "Proyecto"}
           </span>
         </div>
-        <button className="p-2 rounded-xl hover:bg-muted transition-colors opacity-0 group-hover:opacity-100">
+        <button className="p-2 rounded-xl hover:bg-muted transition-colors opacity-0 group-hover:opacity-100 cursor-pointer" onClick={() => switchHistoryModal(id, name)}>
           <MoreHorizontal className="w-5 h-5 text-muted-foreground" />
         </button>
       </div>
@@ -59,11 +54,11 @@ export function BudgetCard({ name, type, spent, total, available, onSpend, onAss
 
       {/* Quick actions */}
       <div className="flex gap-2">
-        <Button variant="outline" size="sm" className="flex-1 rounded-xl" onClick={onSpend}>
+        <Button variant="outline" size="sm" className="flex-1 rounded-xl" onClick={() => switchSpendModal(id, name)}>
           <Receipt className="w-4 h-4 mr-1" />
           Gastar
         </Button>
-        <Button variant="secondary" size="sm" className="flex-1 rounded-xl" onClick={onAssign}>
+        <Button variant="secondary" size="sm" className="flex-1 rounded-xl" onClick={() => switchAssignModal(id, name)}>
           <Plus className="w-4 h-4 mr-1" />
           Asignar
         </Button>

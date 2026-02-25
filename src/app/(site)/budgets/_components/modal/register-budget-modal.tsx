@@ -58,7 +58,7 @@ export function RegisterBudgetModal({ isOpen, onClose }: RegisterBudgetModalProp
       {/* Modal */}
       <div className="relative bg-card text-card-foreground rounded-xl p-8 w-full max-w-md shadow-lg">
         {/* Close button */}
-        <button onClick={onClose} className="absolute top-4 right-4 p-2 rounded-xl hover:bg-accent transition-colors">
+        <button onClick={onClose} className="absolute top-4 right-4 p-2 rounded-xl hover:bg-accent transition-colors cursor-pointer">
           <X className="w-5 h-5 text-muted-foreground" />
         </button>
 
@@ -84,7 +84,7 @@ export function RegisterBudgetModal({ isOpen, onClose }: RegisterBudgetModalProp
           {/* Type select */}
           <div>
             <label className="block text-sm font-medium mb-2">Tipo</label>
-            <select {...register("type")} className="w-full px-4 py-2 rounded-xl bg-secondary text-secondary-foreground border border-secondary-foreground/20">
+            <select {...register("type")} className="w-full px-4 py-2 rounded-xl bg-secondary text-secondary-foreground border border-secondary-foreground/20 cursor-pointer">
               <option value={BUDGET_TYPES.RECURRENT}>{BUDGET_TYPE_LABELS[BUDGET_TYPES.RECURRENT]}</option>
               <option value={BUDGET_TYPES.PROJECT}>{BUDGET_TYPE_LABELS[BUDGET_TYPES.PROJECT]}</option>
             </select>

@@ -1,17 +1,21 @@
 "use client";
 import { useState } from "react";
 import { BudgetFilters } from "./index";
-import { RegisterBudgetModal } from "@/components/modal";
+import { RegisterBudgetModal } from "./modal/index";
+import { BudgetAssignModal, BudgetSpendModal, BudgetTransactionHistory } from "./modal";
 
 export const BudgetControls = () => {
-  const [isModalOpen, setModalOpen] = useState(false);
+  const [isCreateOpen, setCreateOpen] = useState(false);
 
   return (
     <>
-      {/* Filters */}
-      <BudgetFilters setModalState={setModalOpen} />
+      <BudgetFilters setModalState={setCreateOpen} />
 
-      <RegisterBudgetModal isOpen={isModalOpen} onClose={() => setModalOpen(false)} />
+      <RegisterBudgetModal isOpen={isCreateOpen} onClose={() => setCreateOpen(false)} />
+
+      <BudgetSpendModal />
+      <BudgetAssignModal />
+      <BudgetTransactionHistory />
     </>
   );
 };

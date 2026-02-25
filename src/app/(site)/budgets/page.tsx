@@ -1,7 +1,6 @@
 import { QueryClient, dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { getBudgets } from "@/actions/budgets/get-budgets";
 import { BudgetHeader, BudgetSummary, BudgetGrid, BudgetControls } from "./_components";
-import QueryProvider from "@/components/providers/tanstack-query.provider";
 
 export default async function Budgets() {
   const queryClient = new QueryClient();

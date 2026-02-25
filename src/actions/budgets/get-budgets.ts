@@ -4,7 +4,7 @@ import prisma from "@/lib/prisma";
 import { ActionResponse } from "@/types/action-response.type";
 import { getUserId } from "@/actions/auth/get-user-id";
 import { Budget } from "@/generated/prisma/client";
-import { PaginatedResponseType, paginationSchema, PaginationType } from "@/schemas/pagination";
+import { PaginatedResponseType, paginationSchema } from "@/schemas/pagination";
 import * as z from "zod";
 
 const getBudgetsSchema = z.object({
@@ -23,7 +23,7 @@ export async function getBudgets({ take, page, filter }: GetBudgetsInput): Promi
       return { ok: false, error: "Usuario no autenticado" };
     }
 
-    console.log(`📊 Query budgets - Page: ${page}, Time: ${new Date().toLocaleTimeString()}`);
+    // console.log(`📊 Query budgets - Page: ${page}, Time: ${new Date().toLocaleTimeString()}`);
 
     const [data, total] = await Promise.all([
       prisma.budget.findMany({

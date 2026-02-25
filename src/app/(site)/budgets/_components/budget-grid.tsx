@@ -14,17 +14,18 @@ export const BudgetGrid = () => {
     return <CustomLoading />;
   }
 
-  if (!budgetList || budgetList.length === 0) {
-    return <p className="text-gray-500">No hay presupuestos para mostrar</p>;
-  }
-
   return (
     <>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-        {budgetList.map((budget) => (
-          <BudgetCard key={budget.id} id={budget.id} name={budget.name} type={budget.type as "recurrent" | "project"} spent={budget.spent} total={budget.totalAssigned} available={budget.totalAssigned - budget.spent} />
-        ))}
-      </div>
+      {!budgetList || budgetList.length === 0 ? (
+        <p className="text-gray-500 text-center py-8">No hay presupuestos para mostrar</p>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          {budgetList.map((budget) => (
+            <BudgetCard key={budget.id} userId={budget.userId} id={budget.id} name={budget.name} type={budget.type} spent={budget.spent} totalAssigned={budget.totalAssigned} createdAt={budget.createdAt} />
+          ))}
+        </div>
+      )}
+
       <CustomPagination totalPages={data?.ok ? data.result?.totalPages || 1 : 1} />
     </>
   );

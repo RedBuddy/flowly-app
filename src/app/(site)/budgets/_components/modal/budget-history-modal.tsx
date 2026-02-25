@@ -4,7 +4,10 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { formatCurrency } from "@/helpers/currency-formatter";
 import { formatDateTime } from "@/helpers/date-formatter";
 import { useBudgetModalsStore } from "@/stores/budget-modals.store";
-import { useBudgetTransactions } from "@/hooks/useBudget";
+import { useBudgetTransactions, useDeleteBudget } from "@/hooks/useBudget";
+import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
+import { AlertDialogModal } from "@/components/modal/alert-dialog-modal";
 
 export type Transaction = {
   id: string;
@@ -18,6 +21,7 @@ export type Transaction = {
 export const BudgetTransactionHistory = () => {
   const { history, switchHistoryModal } = useBudgetModalsStore();
   const { data } = useBudgetTransactions(history.budgetId!);
+  const { mutateAsync, isPending } = useDeleteBudget();
 
   if (!data?.ok) return null;
   const transactions = data.result ?? [];
@@ -26,6 +30,16 @@ export const BudgetTransactionHistory = () => {
 
   const totalExpenses = transactions.filter((t) => t.type === "expense").reduce((s, t) => s + t.amount, 0);
   const totalAssignments = transactions.filter((t) => t.type === "assignment").reduce((s, t) => s + t.amount, 0);
+
+  const deleteBudget = async (budgetId: string) => {
+    try {
+      await mutateAsync(history.budgetId!);
+      switchHistoryModal();
+      toast.success("Presupuesto eliminado");
+    } catch (error) {
+      toast.error("Error al eliminar el presupuesto");
+    }
+  };
 
   return (
     <Dialog open={history.isOpen} onOpenChange={() => switchHistoryModal()}>
@@ -74,6 +88,23 @@ export const BudgetTransactionHistory = () => {
               </div>
             ))
           )}
+        </div>
+        <div className="flex gap-2 w-full">
+          <Button variant="outline" onClick={() => switchHistoryModal()} className="flex-1" disabled={isPending}>
+            Cerrar
+          </Button>
+
+          <AlertDialogModal
+            trigger={
+              <Button className="flex-1" variant="destructive">
+                Eliminar
+              </Button>
+            }
+            title="¿Eliminar budget?"
+            description="Esta acción no se puede deshacer."
+            onConfirm={() => deleteBudget(history.budgetId!)}
+            isLoading={isPending}
+          />
         </div>
       </DialogContent>
     </Dialog>

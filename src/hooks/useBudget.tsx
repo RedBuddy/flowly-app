@@ -1,8 +1,8 @@
 import { createBudgetTransaction } from "@/actions/budgets/create-budget-transaction";
 import { CreateBudgetAction } from "@/actions/budgets/create-budget.action";
+import { deleteBudget } from "@/actions/budgets/delete-budget";
 import { getBudgetTransactions } from "@/actions/budgets/get-budget-transactions";
 import { getBudgets } from "@/actions/budgets/get-budgets";
-import { BudgetTransactionFormData } from "@/schemas/prisma";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useQueryState } from "nuqs";
 
@@ -33,6 +33,20 @@ export const useCreateBudget = () => {
   });
 };
 
+export const useDeleteBudget = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: deleteBudget,
+    onSuccess: (response) => {
+      if (!response.ok) return;
+      queryClient.invalidateQueries({
+        queryKey: ["budgets"],
+      });
+    },
+  });
+};
+
 export const useCreateBudgetTransaction = (budgetId: string) => {
   const queryClient = useQueryClient();
 
@@ -50,10 +64,9 @@ export const useCreateBudgetTransaction = (budgetId: string) => {
         };
       });
 
-      // Invalidate para asegurar que cualquier otra query relacionada se actualice
+      // Invalidar la query de presupuestos para actualizar los totales:
       queryClient.invalidateQueries({
         queryKey: ["budgets"],
-        // refetchType: "all",
       });
     },
   });

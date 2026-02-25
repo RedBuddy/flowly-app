@@ -30,6 +30,7 @@ export async function getBudgets({ take, page, filter }: GetBudgetsInput): Promi
         where: { userId, type: filter === "all" ? undefined : filter as any },
         skip: (page - 1) * take,
         take,
+        orderBy: { createdAt: "desc" },
       }),
       prisma.budget.count({
         where: { userId, type: filter === "all" ? undefined : filter as any },

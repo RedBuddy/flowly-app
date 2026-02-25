@@ -5,27 +5,23 @@ import { Button } from "@/components/ui/button";
 import { formatCurrency } from "@/helpers/currency-formatter";
 import { useBudgetModalsStore } from "@/stores/budget-modals.store";
 import { BUDGET_TYPES } from "@/schemas/prisma";
+import { Budget } from "@/generated/prisma/client";
+import { formatDateShort } from "@/helpers/date-formatter";
 
-interface BudgetCardProps {
-  id: string;
-  name: string;
-  type: (typeof BUDGET_TYPES)[keyof typeof BUDGET_TYPES];
-  spent: number;
-  total: number;
-  available: number;
-}
-
-export function BudgetCard({ id, name, type, spent, total, available }: BudgetCardProps) {
+export function BudgetCard({ id, name, type, spent, totalAssigned, createdAt }: Budget) {
   const { switchSpendModal, switchAssignModal, switchHistoryModal } = useBudgetModalsStore();
 
-  const progress = total > 0 ? (spent / total) * 100 : 0;
-  const isLow = available < total * 0.2;
+  const progress = totalAssigned > 0 ? (spent / totalAssigned) * 100 : 0;
+  const available = totalAssigned - spent;
+  const isLow = available < totalAssigned * 0.2;
 
   return (
     <div className="group relative bg-card rounded-2xl p-5 shadow-soft border border-border/50 hover:shadow-card transition-all duration-300 animate-scale-in">
       <div className="flex items-start justify-between mb-4">
         <div>
-          <h3 className="font-semibold text-foreground text-lg">{name}</h3>
+          <h3 className="font-semibold text-foreground text-lg">
+            {name} <span className="text-xs text-muted-foreground"> {formatDateShort(createdAt)}</span>
+          </h3>
           <span className={cn("inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium mt-1", type === BUDGET_TYPES.RECURRENT ? "bg-secondary text-secondary-foreground" : "bg-accent text-accent-foreground")}>
             {type === BUDGET_TYPES.RECURRENT ? "Recurrente" : "Proyecto"}
           </span>
@@ -42,7 +38,7 @@ export function BudgetCard({ id, name, type, spent, total, available }: BudgetCa
         </div>
         <div className="flex justify-between mt-2 text-xs text-muted-foreground">
           <span>Gastado: {formatCurrency(spent)}</span>
-          <span>de {formatCurrency(total)}</span>
+          <span>de {formatCurrency(totalAssigned)}</span>
         </div>
       </div>
 

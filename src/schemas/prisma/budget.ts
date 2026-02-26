@@ -8,7 +8,7 @@ export const budgetCreateSchema = z.object({
     .string()
     .min(1, "El nombre del presupuesto es requerido")
     .max(100, "El nombre no puede exceder 100 caracteres"),
-  type: z.enum([BUDGET_TYPES.RECURRENT, BUDGET_TYPES.PROJECT], {
+  type: z.enum([BUDGET_TYPES.RECURRENT, BUDGET_TYPES.OCCASIONAL], {
     message: "Selecciona un tipo válido",
   }),
   totalAssigned: moneySchema,

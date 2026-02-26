@@ -7,6 +7,8 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { budgetCreateSchema, BudgetFormData, BUDGET_TYPES, BUDGET_TYPE_LABELS } from "@/schemas/prisma";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useCreateBudget } from "@/hooks/useBudget";
+import { useQueryState } from "nuqs";
+import { toast } from "sonner";
 
 interface RegisterBudgetModalProps {
   isOpen: boolean;
@@ -15,6 +17,7 @@ interface RegisterBudgetModalProps {
 
 export function RegisterBudgetModal({ isOpen, onClose }: RegisterBudgetModalProps) {
   const { mutateAsync, isPending } = useCreateBudget();
+  const [page, setPage] = useQueryState("page", { defaultValue: "1" });
 
   const {
     register,
@@ -42,8 +45,10 @@ export function RegisterBudgetModal({ isOpen, onClose }: RegisterBudgetModalProp
         return;
       }
 
+      setPage("1");
       onClose();
       reset();
+      toast.success("Presupuesto creado exitosamente");
     } catch (error) {
       console.error("Error al registrar presupuesto:", error);
       setError("root", { message: "Error inesperado al registrar el presupuesto" });
@@ -84,9 +89,9 @@ export function RegisterBudgetModal({ isOpen, onClose }: RegisterBudgetModalProp
           {/* Type select */}
           <div>
             <label className="block text-sm font-medium mb-2">Tipo</label>
-            <select {...register("type")} className="w-full px-4 py-2 rounded-xl bg-secondary text-secondary-foreground border border-secondary-foreground/20 cursor-pointer">
+            <select {...register("type")} className="w-full px-4 py-1 rounded-xl bg-secondary text-secondary-foreground border border-secondary-foreground/20 cursor-pointer">
               <option value={BUDGET_TYPES.RECURRENT}>{BUDGET_TYPE_LABELS[BUDGET_TYPES.RECURRENT]}</option>
-              <option value={BUDGET_TYPES.PROJECT}>{BUDGET_TYPE_LABELS[BUDGET_TYPES.PROJECT]}</option>
+              <option value={BUDGET_TYPES.OCCASIONAL}>{BUDGET_TYPE_LABELS[BUDGET_TYPES.OCCASIONAL]}</option>
             </select>
             {errors.type && <p className="text-destructive text-sm">{errors.type.message}</p>}
           </div>
@@ -96,16 +101,22 @@ export function RegisterBudgetModal({ isOpen, onClose }: RegisterBudgetModalProp
             <label className="block text-sm font-medium mb-2">Monto a asignar</label>
             <div className="relative">
               <span className="absolute left-4 top-1/2 -translate-y-1/2 text-2xl font-medium text-muted-foreground">$</span>
-              <Input {...register("totalAssigned", { valueAsNumber: true })} type="number" inputMode="decimal" placeholder="0" className="pl-10 pr-4 py-6 text-3xl font-bold rounded-2xl" step="0.01" />
+              <Input {...register("totalAssigned", { valueAsNumber: true })} type="number" inputMode="decimal" placeholder="0" className="pl-10 pr-4 py-4 text-3xl font-bold rounded-2xl" step="0.01" />
             </div>
             {errors.totalAssigned && <p className="text-destructive text-sm">{errors.totalAssigned.message}</p>}
           </div>
 
           {/* Submit button */}
-          <Button type="submit" size="lg" className="w-full py-6 rounded-2xl font-semibold text-lg" disabled={isPending}>
+          <Button type="submit" className="w-full py-4 rounded-xl" disabled={isPending}>
             <Plus className="w-5 h-5 mr-2" />
             Crear presupuesto
           </Button>
+          {/* Error general */}
+          {errors.root && (
+            <div className="p-4 rounded-xl bg-destructive/10 border border-destructive/30">
+              <p className="text-destructive text-sm font-medium">{errors.root.message}</p>
+            </div>
+          )}
         </form>
       </div>
     </div>

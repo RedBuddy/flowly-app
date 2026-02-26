@@ -1,14 +1,14 @@
 // Budget enums
 export const BUDGET_TYPES = {
   RECURRENT: "recurrent",
-  PROJECT: "project",
+  OCCASIONAL: "occasional",
 } as const;
 
 export type BudgetType = typeof BUDGET_TYPES[keyof typeof BUDGET_TYPES];
 
 export const BUDGET_TYPE_LABELS = {
   [BUDGET_TYPES.RECURRENT]: "Recurrente",
-  [BUDGET_TYPES.PROJECT]: "Proyecto",
+  [BUDGET_TYPES.OCCASIONAL]: "Ocasional",
 } as const;
 
 // Debt enums

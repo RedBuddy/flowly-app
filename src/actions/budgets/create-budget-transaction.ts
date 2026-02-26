@@ -26,7 +26,13 @@ export const createBudgetTransaction = async (data: BudgetTransactionFormData): 
         data: {
           [data.type === "assignment" ? "totalAssigned" : "spent"]: { increment: data.amount }
         }
-      })
+      }),
+      ...(data.type === "assignment" ? [prisma.user.update({
+        where: { id: userId },
+        data: {
+          totalMoney: { decrement: data.amount }
+        }
+      })] : [])
     ]);
 
     return { ok: true, result: transaction };

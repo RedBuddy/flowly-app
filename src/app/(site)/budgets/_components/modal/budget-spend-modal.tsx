@@ -52,13 +52,9 @@ export const BudgetSpendModal = () => {
   return (
     <Dialog open={spend.isOpen} onOpenChange={() => switchSpendModal()}>
       <DialogContent className="rounded-2xl">
-        <form
-          onSubmit={handleSubmit(onSubmit, (errors) => {
-            console.log("Errores de validación:", errors);
-          })}
-        >
+        <form className="space-y-2">
           <DialogHeader>
-            <DialogTitle className="flex items-center gap-2">
+            <DialogTitle className="flex gap-2 text-start">
               <Receipt className="w-5 h-5 text-primary" />
               Registrar gasto en {spend.name}
             </DialogTitle>
@@ -83,13 +79,13 @@ export const BudgetSpendModal = () => {
             </div>
           </div>
 
-          <DialogFooter>
+          <DialogFooter className="flex w-full">
             <DialogClose asChild>
-              <Button variant="outline" className="rounded-xl" onClick={() => switchSpendModal()}>
+              <Button variant="outline" className="rounded-xl flex-1" onClick={() => switchSpendModal()}>
                 Cancelar
               </Button>
             </DialogClose>
-            <Button type="submit" className="rounded-xl" disabled={isPending}>
+            <Button type="submit" className="rounded-xl flex-1" disabled={isPending}>
               Registrar gasto
             </Button>
           </DialogFooter>

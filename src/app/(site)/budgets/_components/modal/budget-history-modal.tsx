@@ -1,10 +1,10 @@
 "use client";
-import { Receipt, ArrowUpRight, ArrowDownLeft } from "lucide-react";
+import { Receipt, ArrowUpRight, ArrowDownLeft, Trash2 } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { formatCurrency } from "@/helpers/currency-formatter";
 import { formatDateTime } from "@/helpers/date-formatter";
 import { useBudgetModalsStore } from "@/stores/budget-modals.store";
-import { useBudgetTransactions, useDeleteBudget } from "@/hooks/useBudget";
+import { useBudgetTransactions, useDeleteBudget, useDeleteBudgetTransaction } from "@/hooks/useBudget";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { AlertDialogModal } from "@/components/modal/alert-dialog-modal";
@@ -22,6 +22,7 @@ export const BudgetTransactionHistory = () => {
   const { history, switchHistoryModal } = useBudgetModalsStore();
   const { data } = useBudgetTransactions(history.budgetId!);
   const { mutateAsync, isPending } = useDeleteBudget();
+  const { mutateAsync: deleteTransaction, isPending: isDeletingTransaction } = useDeleteBudgetTransaction(history.budgetId!);
 
   if (!data?.ok) return null;
   const transactions = data.result ?? [];
@@ -31,13 +32,26 @@ export const BudgetTransactionHistory = () => {
   const totalExpenses = transactions.filter((t) => t.type === "expense").reduce((s, t) => s + t.amount, 0);
   const totalAssignments = transactions.filter((t) => t.type === "assignment").reduce((s, t) => s + t.amount, 0);
 
-  const deleteBudget = async (budgetId: string) => {
+  const onDeleteBudget = async () => {
     try {
       await mutateAsync(history.budgetId!);
       switchHistoryModal();
       toast.success("Presupuesto eliminado");
     } catch (error) {
       toast.error("Error al eliminar el presupuesto");
+    }
+  };
+
+  const onDeleteTransaction = async (transaction: any) => {
+    try {
+      await deleteTransaction({
+        transactionId: transaction.id,
+        type: transaction.type,
+        amount: transaction.amount,
+      });
+      toast.success("Transacción eliminada");
+    } catch (error) {
+      toast.error("Error al eliminar la transacción");
     }
   };
 
@@ -85,6 +99,9 @@ export const BudgetTransactionHistory = () => {
                   {tx.type === "expense" ? "-" : "+"}
                   {formatCurrency(tx.amount)}
                 </p>
+                <Button size="icon" className="bg-accent ml-2 opacity-50 hover:bg-destructive/50 hover:opacity-100 transition-all" onClick={() => onDeleteTransaction(tx)} disabled={isDeletingTransaction}>
+                  <Trash2 className="w-4 h-4 text-muted-foreground" />
+                </Button>
               </div>
             ))
           )}
@@ -102,7 +119,7 @@ export const BudgetTransactionHistory = () => {
             }
             title="¿Eliminar budget?"
             description="Esta acción no se puede deshacer."
-            onConfirm={() => deleteBudget(history.budgetId!)}
+            onConfirm={() => onDeleteBudget()}
             isLoading={isPending}
           />
         </div>

@@ -5,10 +5,11 @@ import { ActionResponse } from "@/types/action-response.type";
 import { getUserId } from "@/actions/auth/get-user-id";
 import { Budget } from "@/generated/prisma/client";
 import { PaginatedResponseType, paginationSchema } from "@/schemas/pagination";
+import { BUDGET_TYPES } from "@/schemas/prisma";
 import * as z from "zod";
 
 const getBudgetsSchema = z.object({
-  filter: z.enum(["all", "recurrent", "project"]).optional(),
+  filter: z.enum(["all", BUDGET_TYPES.RECURRENT, BUDGET_TYPES.OCCASIONAL]).optional(),
 });
 
 const getBudgetsInputSchema = z.intersection(paginationSchema, getBudgetsSchema);

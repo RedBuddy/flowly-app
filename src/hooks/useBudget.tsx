@@ -1,6 +1,7 @@
 import { createBudgetTransaction } from "@/actions/budgets/create-budget-transaction";
-import { CreateBudgetAction } from "@/actions/budgets/create-budget.action";
+import { CreateBudget } from "@/actions/budgets/create-budget";
 import { deleteBudget } from "@/actions/budgets/delete-budget";
+import { deleteBudgetTransaction } from "@/actions/budgets/delete-budget-transaction";
 import { getBudgetTransactions } from "@/actions/budgets/get-budget-transactions";
 import { getBudgets } from "@/actions/budgets/get-budgets";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -21,12 +22,12 @@ export const useCreateBudget = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: CreateBudgetAction,
+    mutationFn: CreateBudget,
     onSuccess: (response) => {
       if (!response.ok) return;
 
       queryClient.invalidateQueries({
-        queryKey: ["budgets"],
+        queryKey: ["budgets"], // Solo refetch de la primera página sin filtros
         // refetchType: "all", // Fuerza refetch incluso si está en staleTime
       });
     },
@@ -77,5 +78,30 @@ export const useBudgetTransactions = (budgetId: string) => {
     queryKey: ["budgetTransactions", budgetId],
     queryFn: () => getBudgetTransactions(budgetId),
     enabled: !!budgetId, // Solo ejecuta si budgetId es válido
+  });
+};
+
+export const useDeleteBudgetTransaction = (budgetId: string) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (data: { transactionId: string; type: string; amount: number }) => deleteBudgetTransaction(budgetId, data),
+    onSuccess: (response, variables) => {
+      if (!response.ok) return;
+
+      // Elimina la transacción del cache
+      queryClient.setQueryData(["budgetTransactions", budgetId], (old: any) => {
+        if (!old?.result) return old;
+        return {
+          ...old,
+          result: old.result.filter((t: any) => t.id !== variables.transactionId),
+        };
+      });
+
+      // Invalidar la query de presupuestos para actualizar los totales
+      queryClient.invalidateQueries({
+        queryKey: ["budgets"],
+      });
+    },
   });
 };

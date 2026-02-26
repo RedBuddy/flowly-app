@@ -14,11 +14,11 @@ export const BudgetFilters = ({ setModalState }: Props) => {
   const filterOptions = [
     { value: "all", label: "Todos" },
     { value: BUDGET_TYPES.RECURRENT, label: BUDGET_TYPE_LABELS[BUDGET_TYPES.RECURRENT] },
-    { value: BUDGET_TYPES.PROJECT, label: BUDGET_TYPE_LABELS[BUDGET_TYPES.PROJECT] },
+    { value: BUDGET_TYPES.OCCASIONAL, label: BUDGET_TYPE_LABELS[BUDGET_TYPES.OCCASIONAL] },
   ];
 
   return (
-    <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
+    <div className="flex flex-wrap items-center justify-between gap-4 mb-6 mx-4">
       <div className="flex gap-2">
         {filterOptions.map((option) => (
           <button

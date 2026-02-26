@@ -52,9 +52,9 @@ export const BudgetAssignModal = () => {
   return (
     <Dialog open={assign.isOpen} onOpenChange={() => switchAssignModal()}>
       <DialogContent className="rounded-2xl">
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-2">
           <DialogHeader>
-            <DialogTitle className="flex items-center gap-2">
+            <DialogTitle className="flex gap-2">
               <Plus className="w-5 h-5 text-primary" />
               Asignar a {assign.name}
             </DialogTitle>
@@ -84,13 +84,13 @@ export const BudgetAssignModal = () => {
             </div>
           </div>
 
-          <DialogFooter>
+          <DialogFooter className="flex w-full">
             <DialogClose asChild>
-              <Button variant="outline" className="rounded-xl" onClick={() => switchAssignModal()}>
+              <Button variant="outline" className="rounded-xl flex-1" onClick={() => switchAssignModal()}>
                 Cancelar
               </Button>
             </DialogClose>
-            <Button type="submit" className="rounded-xl" disabled={isPending}>
+            <Button type="submit" className="rounded-xl flex-1" disabled={isPending}>
               Asignar
             </Button>
           </DialogFooter>

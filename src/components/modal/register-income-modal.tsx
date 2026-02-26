@@ -26,13 +26,15 @@ export function RegisterIncomeModal({ isOpen, onClose }: RegisterIncomeModalProp
     handleSubmit,
     setError,
     setValue,
-    getValues,
+    watch,
     reset,
     formState: { errors },
   } = useForm<IncomeFormData>({
     defaultValues: { amount: 0, description: "" },
     resolver: zodResolver(incomeCreateSchema),
   });
+
+  const currentAmount = watch("amount");
 
   if (!isOpen) return null;
 
@@ -64,9 +66,9 @@ export function RegisterIncomeModal({ isOpen, onClose }: RegisterIncomeModalProp
       {/* Modal */}
       <div className="relative bg-card text-card-foreground rounded-xl p-8 w-full max-w-md shadow-lg">
         {/* Close button */}
-        <button onClick={onClose} className="absolute top-4 right-4 p-2 rounded-xl hover:bg-accent transition-colors">
+        <Button variant="ghost" size="icon" onClick={onClose} className="absolute top-4 right-4">
           <X className="w-5 h-5 text-muted-foreground" />
-        </button>
+        </Button>
 
         {/* Header */}
         <div className="flex items-center gap-4 mb-6">
@@ -85,7 +87,7 @@ export function RegisterIncomeModal({ isOpen, onClose }: RegisterIncomeModalProp
             <label className="block text-sm font-medium mb-2">Monto</label>
             <div className="relative">
               <span className="absolute left-4 top-1/2 -translate-y-1/2 text-2xl font-medium text-muted-foreground">$</span>
-              <Input {...register("amount", { valueAsNumber: true })} type="text" inputMode="numeric" placeholder="0" className="pl-10 pr-4 py-6 text-3xl font-bold rounded-2xl" />
+              <Input {...register("amount", { valueAsNumber: true })} type="number" inputMode="decimal" placeholder="0" className="pl-10 pr-4 py-4 text-3xl font-bold rounded-xl" step="0.01" />
             </div>
             {errors.amount && <p className="text-destructive text-sm">{errors.amount.message}</p>}
           </div>
@@ -101,21 +103,24 @@ export function RegisterIncomeModal({ isOpen, onClose }: RegisterIncomeModalProp
           <div>
             <p className="text-sm text-muted-foreground mb-3">Montos rápidos</p>
             <div className="flex gap-2 flex-wrap">
-              {[1000, 5000, 10000, 20000].map((quickAmount) => (
-                <button
-                  key={quickAmount}
-                  type="button"
-                  onClick={() => setValue("amount", quickAmount)}
-                  className={cn("px-4 py-2 rounded-xl text-sm font-medium transition-all", Number(getValues("amount")) === quickAmount ? "bg-primary text-primary-foreground" : "bg-secondary text-secondary-foreground hover:bg-secondary/80")}
-                >
-                  ${quickAmount.toLocaleString()}
-                </button>
-              ))}
+              {[1000, 5000, 10000, 20000].map((quickAmount) => {
+                const isSelected = currentAmount === quickAmount;
+                return (
+                  <button
+                    key={quickAmount}
+                    type="button"
+                    onClick={() => setValue("amount", quickAmount)}
+                    className={cn("px-4 py-2 rounded-xl text-sm font-medium transition-all cursor-pointer", isSelected ? "bg-primary text-primary-foreground" : "bg-secondary text-secondary-foreground hover:bg-secondary/80")}
+                  >
+                    ${quickAmount.toLocaleString()}
+                  </button>
+                );
+              })}
             </div>
           </div>
 
           {/* Submit button */}
-          <Button type="submit" size="lg" className="w-full py-6 rounded-2xl font-semibold text-lg" disabled={isPending}>
+          <Button type="submit" className="w-full rounded-xl" disabled={isPending}>
             <Plus className="w-5 h-5 mr-2" />
             Agregar ingreso
           </Button>

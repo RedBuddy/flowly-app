@@ -1,6 +1,5 @@
 "use client";
 
-import { useTransition } from "react";
 import { Plus, X, Wallet } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -8,9 +7,8 @@ import { cn } from "@/lib/utils";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { incomeCreateSchema, IncomeFormData } from "@/schemas/prisma";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CreateIncomeAction } from "@/actions/incomes/create-income.action";
-import { useRouter } from "next/navigation";
-import { Decimal } from "@prisma/client/runtime/client";
+
+import { useCreateIncome } from "@/hooks/useIncome";
 
 interface RegisterIncomeModalProps {
   isOpen: boolean;
@@ -18,8 +16,7 @@ interface RegisterIncomeModalProps {
 }
 
 export function RegisterIncomeModal({ isOpen, onClose }: RegisterIncomeModalProps) {
-  const [isPending, startTransition] = useTransition();
-  const router = useRouter();
+  const { mutateAsync, isPending } = useCreateIncome();
 
   const {
     register,
@@ -38,24 +35,21 @@ export function RegisterIncomeModal({ isOpen, onClose }: RegisterIncomeModalProp
 
   if (!isOpen) return null;
 
-  const onSubmit: SubmitHandler<IncomeFormData> = (data) => {
-    startTransition(async () => {
-      try {
-        const response = await CreateIncomeAction(data);
+  const onSubmit: SubmitHandler<IncomeFormData> = async (data) => {
+    try {
+      const response = await mutateAsync(data);
 
-        if (!response.ok) {
-          setError("root", { message: response.error });
-          return;
-        }
-
-        router.push("/"); // Redireccionar a la página principal o actualizar el estado global para reflejar el nuevo ingreso
-        onClose(); // Cerrar el modal después de un registro exitoso
-        reset(); // Resetear los valores del formulario
-      } catch (error) {
-        console.error("Error al registrar ingreso:", error);
-        setError("root", { message: "Error inesperado al registrar el ingreso" });
+      if (!response.ok) {
+        setError("root", { message: response.error });
+        return;
       }
-    });
+
+      onClose();
+      reset();
+    } catch (error) {
+      console.error("Error al registrar ingreso:", error);
+      setError("root", { message: "Error inesperado al registrar el ingreso" });
+    }
   };
 
   return (

@@ -49,10 +49,15 @@ export const BudgetSpendModal = () => {
     }
   };
 
+  const handleClose = () => {
+    reset();
+    switchSpendModal();
+  };
+
   return (
-    <Dialog open={spend.isOpen} onOpenChange={() => switchSpendModal()}>
+    <Dialog open={spend.isOpen} onOpenChange={() => handleClose()}>
       <DialogContent className="rounded-2xl">
-        <form className="space-y-2">
+        <form className="space-y-2" onSubmit={handleSubmit(onSubmit)}>
           <DialogHeader>
             <DialogTitle className="flex gap-2 text-start">
               <Receipt className="w-5 h-5 text-primary" />
@@ -89,6 +94,12 @@ export const BudgetSpendModal = () => {
               Registrar gasto
             </Button>
           </DialogFooter>
+          {/* Error general */}
+          {errors.root && (
+            <div className="p-4 rounded-xl bg-destructive/10 border border-destructive/30">
+              <p className="text-destructive text-sm font-medium">{errors.root.message}</p>
+            </div>
+          )}
         </form>
       </DialogContent>
     </Dialog>

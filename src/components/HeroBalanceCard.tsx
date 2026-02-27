@@ -2,14 +2,7 @@ import { Plus, ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { formatCurrency } from "@/helpers/currency-formatter";
 import { useGetBalanceSummary } from "@/hooks/useSummary";
-import { CustomLoading } from "./shared/custom-loading";
-
-// interface HeroBalanceCardProps {
-//   totalMoney: number;
-//   unassignedMoney: number;
-//   assignedMoney: number;
-//   onRegisterIncome: () => void;
-// }
+import { SkeletonCard } from "./skeletons/skeleton-card";
 
 interface Props {
   onRegisterIncome: () => void;
@@ -19,7 +12,11 @@ export function HeroBalanceCard({ onRegisterIncome }: Props) {
   const { data, isLoading } = useGetBalanceSummary();
 
   if (isLoading) {
-    return <CustomLoading />;
+    return (
+      <div className="h-80 relative overflow-hidden rounded-2xl p-5 md:p-6 border border-border/50 bg-gradient-to-br from-card via-card to-card/80 shadow-soft hover:shadow-card transition-all duration-300">
+        <SkeletonCard />
+      </div>
+    );
   }
 
   if (!data?.ok || !data?.result) {
@@ -32,7 +29,7 @@ export function HeroBalanceCard({ onRegisterIncome }: Props) {
   return (
     <div className="relative overflow-hidden rounded-2xl p-5 md:p-6 border border-border/50 bg-gradient-to-br from-card via-card to-card/80 shadow-soft hover:shadow-card transition-all duration-300">
       {/* Gradient accent background */}
-      <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-b from-primary/5 to-transparent rounded-full blur-3xl -z-10" />
+      {/* <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-b from-primary/5 to-transparent rounded-full blur-3xl -z-10" /> */}
 
       <div className="relative z-10">
         {/* Balance amount */}

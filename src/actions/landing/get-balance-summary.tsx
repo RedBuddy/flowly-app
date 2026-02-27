@@ -16,6 +16,7 @@ export const getBalanceSummary = async (): Promise<ActionResponse<BalanceSummary
         where: { userId },
         _sum: {
           totalAssigned: true,
+          spent: true,
         },
       }),
       prisma.user.findUnique({
@@ -33,6 +34,7 @@ export const getBalanceSummary = async (): Promise<ActionResponse<BalanceSummary
         totalMoney: userBalance?.totalMoney ?? 0,
         unassignedMoney: userBalance?.unassignedMoney ?? 0,
         assignedMoney: budgetStats._sum.totalAssigned ?? 0,
+        spentMoney: budgetStats._sum.spent ?? 0,
       },
     };
   } catch (error) {

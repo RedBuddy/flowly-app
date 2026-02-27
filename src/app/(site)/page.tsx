@@ -1,6 +1,7 @@
-import { AppHeader } from "@/components/main/app-header";
-import { BudgetSlider, HeroSection, ProjectSlider } from "@/components/main";
-import { DebtSlider } from "@/components/main/debts-slider";
+import { AppHeader } from "@/components/landing/app-header";
+import { BudgetSlider, HeroSection, ProjectSlider } from "@/components/landing";
+import { DebtSlider } from "@/components/landing/debts-slider";
+import { ModalAutoCloser } from "@/components/modal/modal-auto-closer";
 
 export default function HomePage() {
   return (
@@ -12,7 +13,8 @@ export default function HomePage() {
         <BudgetSlider />
         <ProjectSlider />
         <DebtSlider />
-        {/* <Index /> */}
+        {/* Helper */}
+        <ModalAutoCloser />
       </main>
     </>
   );

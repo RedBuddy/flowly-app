@@ -14,6 +14,35 @@ export const createBudgetTransaction = async (data: BudgetTransactionFormData): 
       return { ok: false, error: "Usuario no autenticado" };
     }
 
+    // Verificación
+
+    if (data.type === "assignment") {
+      const user = await prisma.user.findUnique({
+        where: { id: userId },
+        select: { unassignedMoney: true }
+      })
+
+      if (!user) throw new Error("Usuario no encontrado");
+
+      if (user.unassignedMoney < data.amount) throw new Error(
+        `No tienes suficiente dinero disponible. Tienes $${user.unassignedMoney}, necesitas $${data.amount}`
+      );
+    } else {
+      const budget = await prisma.budget.findUnique({
+        where: { id: data.budgetId },
+        select: { totalAssigned: true, spent: true }
+      })
+
+      if (!budget) throw new Error("Presupuesto no encontrado");
+
+      const disponible = (budget.totalAssigned - budget.spent);
+
+      if (disponible < data.amount) throw new Error(
+        `Tu presupuesto solo tiene $${disponible}, no puedes gastar $${data.amount}`
+      );
+    }
+
+
     const [transaction] = await prisma.$transaction([
       prisma.budgetTransaction.create({
         data: {
@@ -30,7 +59,7 @@ export const createBudgetTransaction = async (data: BudgetTransactionFormData): 
       ...(data.type === "assignment" ? [prisma.user.update({
         where: { id: userId },
         data: {
-          totalMoney: { decrement: data.amount }
+          unassignedMoney: { decrement: data.amount }
         }
       })] : [])
     ]);
@@ -40,6 +69,5 @@ export const createBudgetTransaction = async (data: BudgetTransactionFormData): 
   } catch (error) {
     return { ok: false, error: error instanceof Error ? error.message : "Failed to create budget transaction" };
   }
-
 }
 

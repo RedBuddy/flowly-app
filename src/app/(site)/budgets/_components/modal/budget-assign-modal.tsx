@@ -49,8 +49,13 @@ export const BudgetAssignModal = () => {
     }
   };
 
+  const handleClose = () => {
+    reset();
+    switchAssignModal();
+  };
+
   return (
-    <Dialog open={assign.isOpen} onOpenChange={() => switchAssignModal()}>
+    <Dialog open={assign.isOpen} onOpenChange={handleClose}>
       <DialogContent className="rounded-2xl">
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-2">
           <DialogHeader>
@@ -94,6 +99,13 @@ export const BudgetAssignModal = () => {
               Asignar
             </Button>
           </DialogFooter>
+
+          {/* Error general */}
+          {errors.root && (
+            <div className="p-4 rounded-xl bg-destructive/10 border border-destructive/30">
+              <p className="text-destructive text-sm font-medium">{errors.root.message}</p>
+            </div>
+          )}
         </form>
       </DialogContent>
     </Dialog>

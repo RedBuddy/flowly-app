@@ -4,17 +4,26 @@ import { deleteBudget } from "@/actions/budgets/delete-budget";
 import { deleteBudgetTransaction } from "@/actions/budgets/delete-budget-transaction";
 import { getBudgetTransactions } from "@/actions/budgets/get-budget-transactions";
 import { getBudgets } from "@/actions/budgets/get-budgets";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { keepPreviousData, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useQueryState } from "nuqs";
+import { getLatestBudgets } from "@/actions/budgets/get-latest-budgets";
 
-export const useBudgets = () => {
+export const useBudgets = (take: number = 8) => {
   const [page] = useQueryState("page", { defaultValue: "1" });
   const [filter] = useQueryState("filter", { defaultValue: "all" });
 
   return useQuery({
-    queryKey: ["budgets", page, filter],
-    queryFn: () => getBudgets({ take: 8, page: +page, filter: filter as any }),
+    queryKey: ["budgets", { page, filter, take }],
+    queryFn: () => getBudgets({ take, page: +page, filter: filter as any }),
     // staleTime: 1000 * 60 * 30, // Cada 30 minutos
+  });
+};
+
+export const useLatestBudgets = (take: number = 4) => {
+  return useQuery({
+    queryKey: ["latestBudgets"],
+    queryFn: () => getLatestBudgets(take),
+    // placeholderData: keepPreviousData,
   });
 };
 
@@ -27,8 +36,11 @@ export const useCreateBudget = () => {
       if (!response.ok) return;
 
       queryClient.invalidateQueries({
-        queryKey: ["budgets"], // Solo refetch de la primera página sin filtros
-        // refetchType: "all", // Fuerza refetch incluso si está en staleTime
+        queryKey: ["budgets"],
+      });
+
+      queryClient.invalidateQueries({
+        queryKey: ["latestBudgets"],
       });
     },
   });
@@ -43,6 +55,10 @@ export const useDeleteBudget = () => {
       if (!response.ok) return;
       queryClient.invalidateQueries({
         queryKey: ["budgets"],
+      });
+
+      queryClient.invalidateQueries({
+        queryKey: ["latestBudgets"],
       });
     },
   });
@@ -68,6 +84,14 @@ export const useCreateBudgetTransaction = (budgetId: string) => {
       // Invalidar la query de presupuestos para actualizar los totales:
       queryClient.invalidateQueries({
         queryKey: ["budgets"],
+      });
+
+      queryClient.invalidateQueries({
+        queryKey: ["latestBudgets"],
+      });
+
+      queryClient.invalidateQueries({
+        queryKey: ["balanceSummary"],
       });
     },
   });
@@ -101,6 +125,14 @@ export const useDeleteBudgetTransaction = (budgetId: string) => {
       // Invalidar la query de presupuestos para actualizar los totales
       queryClient.invalidateQueries({
         queryKey: ["budgets"],
+      });
+
+      queryClient.invalidateQueries({
+        queryKey: ["latestBudgets"],
+      });
+
+      queryClient.invalidateQueries({
+        queryKey: ["balanceSummary"],
       });
     },
   });

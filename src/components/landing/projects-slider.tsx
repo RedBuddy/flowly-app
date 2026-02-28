@@ -10,7 +10,7 @@ const mockProjects = [
 export const ProjectSlider = () => {
   return (
     <>
-      <SectionHeader title="Metas de ahorro" subtitle="Tus proyectos financieros" icon={Target} action={{ label: "Nueva meta", path: "/goals" }} />
+      <SectionHeader title="Metas de ahorro" subtitle="Tus proyectos financieros" icon={Target} action={{ label: "Ver todas", path: "/goals" }} />
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {mockProjects.map((project) => (
           <ProjectCard key={project.id} name={project.name} target={project.target} current={project.current} deadline={project.deadline} />

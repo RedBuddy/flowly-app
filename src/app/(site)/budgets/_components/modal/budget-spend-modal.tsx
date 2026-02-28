@@ -66,10 +66,10 @@ export const BudgetSpendModal = () => {
           </DialogHeader>
 
           <div className="space-y-4 py-2">
-            <div className="p-3 rounded-xl bg-muted">
+            {/* <div className="p-3 rounded-xl bg-muted">
               <p className="text-xs text-muted-foreground">Disponible</p>
               <p className="text-lg font-bold text-foreground">$0.00</p>
-            </div>
+            </div> */}
 
             <div className="space-y-2">
               <Label htmlFor="spend-amount">Monto</Label>

@@ -3,6 +3,7 @@
 import { ArrowLeft, CreditCard, TrendingDown } from "lucide-react";
 import { DebtCard } from "@/components/DebtCard";
 import Link from "next/link";
+import { CustomHeader } from "@/components/shared/custom-header";
 
 const allDebts = [
   { id: 1, name: "Tarjeta BBVA", totalDebt: 45000, remaining: 28500, dueDate: "15 Feb", minimumPayment: 3200, priority: "high" as const },
@@ -29,34 +30,20 @@ const Debts = () => {
   const otherDebts = allDebts.filter((d) => d.priority !== "high");
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-background text-foreground">
       {/* Header */}
-      <header className="sticky top-0 z-40 glass border-b border-border/50">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center gap-4">
-            <Link href="/" className="p-2 rounded-xl hover:bg-muted transition-colors">
-              <ArrowLeft className="w-5 h-5 text-foreground" />
-            </Link>
-            <div className="flex items-center gap-3">
-              <div className="p-2 rounded-xl bg-debt/10">
-                <CreditCard className="w-6 h-6 text-debt" />
-              </div>
-              <span className="text-xl font-bold text-foreground font-display">Deudas</span>
-            </div>
-          </div>
-        </div>
-      </header>
+      <CustomHeader title="Deudas" icon={<CreditCard className="w-6 h-6 text-primary" />} />
 
       <main className="container mx-auto px-4 py-8 max-w-6xl">
         {/* Summary */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-          <div className="bg-card rounded-2xl p-5 shadow-soft border border-debt/20 relative overflow-hidden">
-            <div className="absolute top-0 left-0 right-0 h-1 bg-debt" />
+          <div className="bg-card rounded-2xl p-5 shadow-soft border border-primary/20 relative overflow-hidden">
+            <div className="absolute top-0 left-0 right-0 h-1 bg-primary" />
             <div className="flex items-center gap-3 mb-2">
-              <TrendingDown className="w-5 h-5 text-debt" />
+              <TrendingDown className="w-5 h-5 text-primary" />
               <p className="text-sm text-muted-foreground">Deuda total</p>
             </div>
-            <p className="text-3xl font-bold text-debt">{formatCurrency(totalDebt)}</p>
+            <p className="text-3xl font-bold text-primary">{formatCurrency(totalDebt)}</p>
           </div>
           <div className="bg-card rounded-2xl p-5 shadow-soft border border-border/50">
             <p className="text-sm text-muted-foreground mb-2">Total pagado</p>
@@ -73,8 +60,8 @@ const Debts = () => {
         {highPriority.length > 0 && (
           <section className="mb-8">
             <div className="flex items-center gap-3 mb-4">
-              <div className="p-2 rounded-xl bg-debt/10">
-                <CreditCard className="w-5 h-5 text-debt" />
+              <div className="p-2 rounded-xl bg-primary/10">
+                <CreditCard className="w-5 h-5 text-primary" />
               </div>
               <div>
                 <h2 className="text-lg font-bold text-foreground">Prioridad alta</h2>

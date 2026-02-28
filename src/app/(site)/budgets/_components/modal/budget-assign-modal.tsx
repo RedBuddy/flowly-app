@@ -66,10 +66,10 @@ export const BudgetAssignModal = () => {
           </DialogHeader>
 
           <div className="space-y-4 py-2">
-            <div className="p-3 rounded-xl bg-primary/5">
+            {/* <div className="p-3 rounded-xl bg-primary/5">
               <p className="text-xs text-muted-foreground">Asignado actualmente</p>
               <p className="text-lg font-bold text-primary">$0.00</p>
-            </div>
+            </div> */}
 
             <div className="space-y-2">
               <Label htmlFor="assign-amount">Monto a asignar</Label>
@@ -83,10 +83,10 @@ export const BudgetAssignModal = () => {
               {errors.description && <p className="text-xs text-destructive">{errors.description.message}</p>}
             </div>
 
-            <div className="p-3 rounded-xl bg-muted">
+            {/* <div className="p-3 rounded-xl bg-muted">
               <p className="text-xs text-muted-foreground">Nuevo total asignado</p>
               <p className="text-lg font-bold text-foreground">$0.00</p>
-            </div>
+            </div> */}
           </div>
 
           <DialogFooter className="flex w-full">

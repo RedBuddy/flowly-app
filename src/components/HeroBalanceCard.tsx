@@ -38,8 +38,8 @@ export function HeroBalanceCard({ onRegisterIncome }: Props) {
           <div className="flex items-baseline justify-between gap-4">
             <h1 className="text-4xl md:text-5xl font-bold text-foreground tracking-tight">{formatCurrency(unassignedMoney)}</h1>
             <div className="flex items-center gap-1.5 text-xs text-emerald-500 font-semibold whitespace-nowrap">
-              <ArrowUpRight className="w-3 h-3" />
-              +12% mes
+              {/* <ArrowUpRight className="w-3 h-3" />
+              +12% mes */}
             </div>
           </div>
         </div>

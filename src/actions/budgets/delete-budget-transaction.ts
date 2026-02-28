@@ -22,12 +22,12 @@ export const deleteBudgetTransaction = async (budgetId: string, data: { transact
           [data.type === "assignment" ? "totalAssigned" : "spent"]: { decrement: data.amount }
         }
       }),
-      ...(data.type === "assignment" ? [prisma.user.update({
-        where: { id: userId },
-        data: {
-          unassignedMoney: { increment: data.amount }
-        }
-      })] : [])
+      // ...(data.type === "assignment" ? [prisma.user.update({
+      //   where: { id: userId },
+      //   data: {
+      //     unassignedMoney: { increment: data.amount }
+      //   }
+      // })] : [])
     ]);
 
     return { ok: true };

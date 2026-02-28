@@ -16,31 +16,31 @@ export const createBudgetTransaction = async (data: BudgetTransactionFormData): 
 
     // Verificación
 
-    if (data.type === "assignment") {
-      const user = await prisma.user.findUnique({
-        where: { id: userId },
-        select: { unassignedMoney: true }
-      })
+    // if (data.type === "assignment") {
+    //   const user = await prisma.user.findUnique({
+    //     where: { id: userId },
+    //     select: { unassignedMoney: true }
+    //   })
 
-      if (!user) throw new Error("Usuario no encontrado");
+    //   if (!user) throw new Error("Usuario no encontrado");
 
-      if (user.unassignedMoney < data.amount) throw new Error(
-        `No tienes suficiente dinero disponible. Tienes $${user.unassignedMoney}, necesitas $${data.amount}`
-      );
-    } else {
-      const budget = await prisma.budget.findUnique({
-        where: { id: data.budgetId },
-        select: { totalAssigned: true, spent: true }
-      })
+    //   if (user.unassignedMoney < data.amount) throw new Error(
+    //     `No tienes suficiente dinero disponible. Tienes $${user.unassignedMoney}, necesitas $${data.amount}`
+    //   );
+    // } else {
+    //   const budget = await prisma.budget.findUnique({
+    //     where: { id: data.budgetId },
+    //     select: { totalAssigned: true, spent: true }
+    //   })
 
-      if (!budget) throw new Error("Presupuesto no encontrado");
+    //   if (!budget) throw new Error("Presupuesto no encontrado");
 
-      const disponible = (budget.totalAssigned - budget.spent);
+    //   const disponible = (budget.totalAssigned - budget.spent);
 
-      if (disponible < data.amount) throw new Error(
-        `Tu presupuesto solo tiene $${disponible}, no puedes gastar $${data.amount}`
-      );
-    }
+    //   if (disponible < data.amount) throw new Error(
+    //     `Tu presupuesto solo tiene $${disponible}, no puedes gastar $${data.amount}`
+    //   );
+    // }
 
 
     const [transaction] = await prisma.$transaction([
@@ -56,12 +56,12 @@ export const createBudgetTransaction = async (data: BudgetTransactionFormData): 
           [data.type === "assignment" ? "totalAssigned" : "spent"]: { increment: data.amount }
         }
       }),
-      ...(data.type === "assignment" ? [prisma.user.update({
-        where: { id: userId },
-        data: {
-          unassignedMoney: { decrement: data.amount }
-        }
-      })] : [])
+      // ...(data.type === "assignment" ? [prisma.user.update({
+      //   where: { id: userId },
+      //   data: {
+      //     unassignedMoney: { decrement: data.amount }
+      //   }
+      // })] : [])
     ]);
 
     return { ok: true, result: transaction };

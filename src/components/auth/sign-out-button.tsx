@@ -18,7 +18,7 @@ export const SignOutButton = () => {
   };
 
   return (
-    <Button variant="outline" size="icon" onClick={SignOut} className="flex items-center gap-2" disabled={isPending}>
+    <Button variant="outline" size="icon" onClick={SignOut} className="flex items-center gap-2 rounded-md" disabled={isPending}>
       <LogOut className="w-4 h-4" />
     </Button>
   );

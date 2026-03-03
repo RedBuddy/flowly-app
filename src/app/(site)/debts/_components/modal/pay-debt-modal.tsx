@@ -4,19 +4,19 @@ import { Plus, X } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useGoalModalsStore } from "@/stores/goal-modals.store";
-import { useCreateGoalContribution } from "@/hooks/useGoal";
+import { useDebtModalsStore } from "@/stores/debt-modals.store";
+import { useCreateDebtPayment } from "@/hooks/useDebt";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-interface ContributeGoalFormData {
+interface PayDebtFormData {
   amount: number;
   description: string;
 }
 
-export const ContributeGoalModal = () => {
-  const { contribute, switchContributeModal } = useGoalModalsStore();
-  const { mutateAsync, isPending } = useCreateGoalContribution(contribute.goalId || "");
+export const PayDebtModal = () => {
+  const { pay, switchPayModal } = useDebtModalsStore();
+  const { mutateAsync, isPending } = useCreateDebtPayment(pay.debtId || "");
 
   const {
     register,
@@ -25,7 +25,7 @@ export const ContributeGoalModal = () => {
     reset,
     watch,
     formState: { errors },
-  } = useForm<ContributeGoalFormData>({
+  } = useForm<PayDebtFormData>({
     defaultValues: {
       amount: 0,
       description: "",
@@ -36,18 +36,18 @@ export const ContributeGoalModal = () => {
 
   const handleClose = () => {
     reset();
-    switchContributeModal();
+    switchPayModal();
   };
 
-  const onSubmit: SubmitHandler<ContributeGoalFormData> = async (data) => {
+  const onSubmit: SubmitHandler<PayDebtFormData> = async (data) => {
     try {
-      if (!contribute.goalId) {
-        toast.error("Debes seleccionar una meta");
+      if (!pay.debtId) {
+        toast.error("Debes seleccionar una deuda");
         return;
       }
 
       const response = await mutateAsync({
-        goalId: contribute.goalId,
+        debtId: pay.debtId,
         amount: data.amount,
         description: data.description || undefined,
       });
@@ -57,30 +57,30 @@ export const ContributeGoalModal = () => {
         return;
       }
 
-      toast.success("Contribución registrada exitosamente");
+      toast.success("Pago registrado exitosamente");
       reset();
-      switchContributeModal();
+      switchPayModal();
     } catch (error) {
-      console.error("Error al registrar contribución:", error);
-      setError("root", { message: "Error inesperado al registrar la contribución" });
-      toast.error("Error al registrar la contribución");
+      console.error("Error al registrar pago:", error);
+      setError("root", { message: "Error inesperado al registrar el pago" });
+      toast.error("Error al registrar el pago");
     }
   };
 
   return (
-    <Dialog open={contribute.isOpen} onOpenChange={() => handleClose()}>
+    <Dialog open={pay.isOpen} onOpenChange={() => handleClose()}>
       <DialogContent className="rounded-2xl max-w-md">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Plus className="w-5 h-5 text-primary" />
-            Contribuir a {contribute.name}
+            Pagar {pay.name}
           </DialogTitle>
         </DialogHeader>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           {/* Amount input */}
           <div>
-            <label className="text-sm font-medium text-foreground mb-2 block">Monto a contribuir</label>
+            <label className="text-sm font-medium text-foreground mb-2 block">Monto a pagar</label>
             <div className="relative">
               <span className="absolute left-3 top-1/2 -translate-y-1/2 font-semibold text-primary">$</span>
               <Input
@@ -104,7 +104,7 @@ export const ContributeGoalModal = () => {
             <label className="text-sm font-medium text-foreground mb-2 block">Descripción (opcional)</label>
             <Input
               type="text"
-              placeholder="Ej: Ahorro semanal"
+              placeholder="Ej: Pago quincenal"
               {...register("description", {
                 maxLength: { value: 100, message: "Máximo 100 caracteres" },
               })}
@@ -115,7 +115,7 @@ export const ContributeGoalModal = () => {
           {/* Total preview */}
           <div className="p-3 rounded-xl bg-accent/10 border border-accent/20">
             <div className="flex justify-between items-center">
-              <span className="text-sm text-muted-foreground">Total a contribuir:</span>
+              <span className="text-sm text-muted-foreground">Total a pagar:</span>
               <span className="text-lg font-bold text-accent">${typeof currentAmount === "number" ? currentAmount.toFixed(2) : "0.00"}</span>
             </div>
           </div>
@@ -130,7 +130,7 @@ export const ContributeGoalModal = () => {
               Cancelar
             </Button>
             <Button type="submit" className="flex-1 rounded-md" disabled={isPending}>
-              {isPending ? "Contribuyendo..." : "Contribuir"}
+              {isPending ? "Pagando..." : "Pagar"}
             </Button>
           </div>
         </form>

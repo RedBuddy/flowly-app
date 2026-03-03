@@ -106,7 +106,7 @@ export const BudgetTransactionHistory = () => {
                   />
                 ) : (
                   <div key={tx.id} className="flex items-center gap-3 p-3 rounded-xl bg-muted/50 hover:bg-muted transition-colors">
-                    <div className={`p-2 rounded-lg ${tx.type === "expense" ? "bg-destructive/10" : "bg-primary/10"}`}>
+                    <div className={`p-2 rounded-md ${tx.type === "expense" ? "bg-destructive/10" : "bg-primary/10"}`}>
                       {tx.type === "expense" ? <ArrowUpRight className="w-4 h-4 text-destructive" /> : <ArrowDownLeft className="w-4 h-4 text-primary" />}
                     </div>
                     <div className="flex-1 min-w-0">
@@ -117,10 +117,10 @@ export const BudgetTransactionHistory = () => {
                       {tx.type === "expense" ? "-" : "+"}
                       {formatCurrency(tx.amount)}
                     </p>
-                    <Button size="icon" className="bg-accent ml-2 opacity-50 hover:bg-input/50 hover:opacity-100 transition-all" onClick={() => setEditingId(tx.id)} disabled={isDeletingTransaction}>
+                    <Button size="icon" className="bg-accent ml-2 opacity-50 hover:bg-input/50 hover:opacity-100 transition-all rounded-md" onClick={() => setEditingId(tx.id)} disabled={isDeletingTransaction}>
                       <Edit className="w-4 h-4 text-muted-foreground" />
                     </Button>
-                    <Button size="icon" className="bg-accent opacity-50 hover:bg-destructive/50 hover:opacity-100 transition-all" onClick={() => onDeleteTransaction(tx)} disabled={isDeletingTransaction}>
+                    <Button size="icon" className="bg-accent opacity-50 hover:bg-destructive/50 hover:opacity-100 transition-all rounded-md" onClick={() => onDeleteTransaction(tx)} disabled={isDeletingTransaction}>
                       <Trash2 className="w-4 h-4 text-muted-foreground" />
                     </Button>
                   </div>
@@ -129,13 +129,13 @@ export const BudgetTransactionHistory = () => {
             )}
           </div>
           <div className="flex gap-2 w-full">
-            <Button variant="outline" onClick={() => switchSpendModal(history.budgetId!, history.name!)} className="flex-1 hover:bg-successfull" disabled={isPending}>
+            <Button variant="outline" onClick={() => switchSpendModal(history.budgetId!, history.name!)} className="flex-1 hover:bg-successfull rounded-md" disabled={isPending}>
               Agregar gasto
             </Button>
 
             <AlertDialogModal
               trigger={
-                <Button className="flex-1" variant="destructive">
+                <Button className="flex-1 rounded-md" variant="destructive">
                   Eliminar
                 </Button>
               }

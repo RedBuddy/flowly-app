@@ -30,7 +30,7 @@ export const BudgetFilters = ({ setModalState }: Props) => {
           </button>
         ))}
       </div>
-      <Button className="rounded-xl" onClick={() => setModalState(true)}>
+      <Button className="rounded-md" onClick={() => setModalState(true)}>
         <Plus className="w-4 h-4 mr-2" />
         Nuevo presupuesto
       </Button>

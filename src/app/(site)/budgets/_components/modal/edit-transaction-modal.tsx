@@ -84,7 +84,7 @@ export const EditTransactionInline = ({ transaction, budgetId, onCancel, onSucce
 
   return (
     <div className="flex items-center gap-3 p-3 rounded-xl bg-muted/50 border-2 border-primary/50">
-      <div className={`p-2 rounded-lg flex-shrink-0 ${isExpense ? "bg-destructive/10" : "bg-primary/10"}`}>
+      <div className={`p-2 rounded-md flex-shrink-0 ${isExpense ? "bg-destructive/10" : "bg-primary/10"}`}>
         <Edit className={`w-4 h-4 ${isExpense ? "text-destructive" : "text-primary"}`} />
       </div>
 
@@ -118,10 +118,10 @@ export const EditTransactionInline = ({ transaction, budgetId, onCancel, onSucce
 
         {/* Action buttons */}
         <div className="flex gap-1 ml-auto">
-          <Button type="submit" size="icon" disabled={isPending} className="flex-shrink-0 bg-accent/30 hover:bg-successfull/50">
+          <Button type="submit" size="icon" disabled={isPending} className="flex-shrink-0 bg-accent/30 hover:bg-successfull/50 rounded-md">
             <Check className="w-4 h-4 text-successfull" />
           </Button>
-          <Button type="button" size="icon" onClick={onCancel} disabled={isPending} className="flex-shrink-0 bg-accent/30 hover:bg-destructive/50">
+          <Button type="button" size="icon" onClick={onCancel} disabled={isPending} className="flex-shrink-0 bg-accent/30 hover:bg-destructive/50 rounded-md">
             <X className="w-4 h-4 text-destructive" />
           </Button>
         </div>

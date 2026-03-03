@@ -40,7 +40,7 @@ export function AlertCard({ type, title, message, actionLabel, onAction }: Alert
   const Icon = alertIcons[type];
 
   return (
-    <div className={cn("flex items-center gap-4 p-4 rounded-2xl border transition-all hover:shadow-soft cursor-pointer animate-slide-up", styles.bg)} onClick={onAction}>
+    <div className={cn("flex items-center gap-4 p-4 rounded-xl border transition-all hover:shadow-soft cursor-pointer animate-slide-up", styles.bg)} onClick={onAction}>
       <div className={cn("p-3 rounded-xl", styles.iconBg)}>
         <Icon className={cn("w-5 h-5", styles.icon)} />
       </div>

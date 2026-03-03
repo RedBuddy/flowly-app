@@ -22,18 +22,18 @@ export const CustomPagination = ({ totalPages }: Props) => {
 
   return (
     <div className="flex items-center justify-center space-x-2">
-      <Button variant="outline" size="sm" disabled={page === 1} onClick={() => handlePageChange(page - 1)}>
+      <Button variant="outline" size="sm" disabled={page === 1} onClick={() => handlePageChange(page - 1)} className="rounded-md">
         <ChevronLeft className="h-4 w-4" />
         Anterior
       </Button>
 
       {Array.from({ length: totalPages }).map((_, index) => (
-        <Button key={index} variant={page === index + 1 ? "default" : "outline"} size="sm" onClick={() => handlePageChange(index + 1)}>
+        <Button key={index} variant={page === index + 1 ? "default" : "outline"} size="sm" onClick={() => handlePageChange(index + 1)} className="rounded-md">
           {index + 1}
         </Button>
       ))}
 
-      <Button disabled={page === totalPages} variant="outline" size="sm" onClick={() => handlePageChange(page + 1)}>
+      <Button disabled={page === totalPages} variant="outline" size="sm" onClick={() => handlePageChange(page + 1)} className="rounded-md">
         Siguiente
         <ChevronRight className="h-4 w-4" />
       </Button>

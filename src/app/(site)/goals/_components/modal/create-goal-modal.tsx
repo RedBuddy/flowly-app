@@ -114,14 +114,14 @@ export const CreateGoalModal = () => {
           </div>
 
           {/* Error message */}
-          {errors.root && <div className="p-3 rounded-lg bg-destructive/10 text-destructive text-sm">{errors.root.message}</div>}
+          {errors.root && <div className="p-3 rounded-md bg-destructive/10 text-destructive text-sm">{errors.root.message}</div>}
 
           {/* Actions */}
           <div className="flex gap-2 pt-4">
-            <Button type="button" variant="outline" onClick={() => onOpenChange(false)} className="flex-1" disabled={isPending}>
+            <Button type="button" variant="outline" onClick={() => onOpenChange(false)} className="flex-1 rounded-md" disabled={isPending}>
               Cancelar
             </Button>
-            <Button type="submit" className="flex-1" disabled={isPending}>
+            <Button type="submit" className="flex-1 rounded-md" disabled={isPending}>
               {isPending ? "Creando..." : "Crear meta"}
             </Button>
           </div>

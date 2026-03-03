@@ -1,79 +1,67 @@
-import { Plus, ArrowUpRight } from "lucide-react";
+import { Plus, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { formatCurrency } from "@/helpers/currency-formatter";
-import { useGetBalanceSummary } from "@/hooks/useSummary";
-import { SkeletonCard } from "./skeletons/skeleton-card";
+import { useGetIncomeSummary } from "@/hooks/useIncome";
+import { useIncomeModalsStore } from "@/stores/income-modals.store";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface Props {
   onRegisterIncome: () => void;
 }
 
 export function HeroBalanceCard({ onRegisterIncome }: Props) {
-  const { data, isLoading } = useGetBalanceSummary();
+  const { data, isLoading } = useGetIncomeSummary();
+  const { switchHistoryModal } = useIncomeModalsStore();
 
   if (isLoading) {
     return (
-      <div className="h-80 relative overflow-hidden rounded-2xl p-5 md:p-6 border border-border/50 bg-gradient-to-br from-card via-card to-card/80 shadow-soft hover:shadow-card transition-all duration-300">
-        <SkeletonCard />
+      <div className="rounded-xl p-6 md:p-8 border border-border/50 bg-gradient-to-br from-primary/5 via-card to-card/80">
+        <Skeleton className="h-32 w-full rounded-lg" />
       </div>
     );
   }
 
   if (!data?.ok || !data?.result) {
-    return <div>Error loading balance</div>;
+    return <div>Error loading incomes</div>;
   }
 
-  const { totalMoney, unassignedMoney, assignedMoney } = data.result;
-  const distributionPercent = totalMoney > 0 ? (assignedMoney / totalMoney) * 100 : 0;
+  const { currentMonth } = data.result;
 
   return (
-    <div className="relative overflow-hidden rounded-2xl p-5 md:p-6 border border-border/50 bg-gradient-to-br from-card via-card to-card/80 shadow-soft hover:shadow-card transition-all duration-300">
-      {/* Gradient accent background */}
-      {/* <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-b from-primary/5 to-transparent rounded-full blur-3xl -z-10" /> */}
+    <div className="relative overflow-hidden rounded-xl p-6 md:p-8 border border-primary/30 bg-gradient-to-br from-primary/5 via-card to-card/80 shadow-lg hover:shadow-xl transition-all duration-300">
+      {/* Header con título y botones */}
+      <div className="flex items-center justify-between mb-8">
+        <div>
+          <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-1">Este Mes</p>
+          <h2 className="text-lg font-semibold text-foreground">Ingresos Registrados</h2>
+        </div>
+        <div className="flex gap-2.5">
+          <Button onClick={() => switchHistoryModal(true)} size="sm" variant="outline" className="h-9 px-4 rounded-md font-medium text-sm gap-2 border-primary/50 hover:bg-primary/10">
+            <Eye className="w-4 h-4" />
+            <span className="hidden sm:inline">Historial</span>
+          </Button>
+          <Button onClick={onRegisterIncome} size="sm" className="h-9 px-4 rounded-md font-medium text-sm gap-2 bg-primary hover:bg-primary/90">
+            <Plus className="w-4 h-4" />
+            <span className="hidden sm:inline">Registrar</span>
+          </Button>
+        </div>
+      </div>
 
-      <div className="relative z-10">
-        {/* Balance amount */}
-        <div className="mb-4">
-          <p className="text-xs font-medium text-muted-foreground mb-1">Tu balance disponible</p>
-          <div className="flex items-baseline justify-between gap-4">
-            <h1 className="text-4xl md:text-5xl font-bold text-foreground tracking-tight">{formatCurrency(unassignedMoney)}</h1>
-            <div className="flex items-center gap-1.5 text-xs text-emerald-500 font-semibold whitespace-nowrap">
-              {/* <ArrowUpRight className="w-3 h-3" />
-              +12% mes */}
-            </div>
-          </div>
+      {/* Main stats */}
+      <div className="grid grid-cols-2 gap-6 md:gap-8">
+        {/* Total */}
+        <div className="group rounded-xl p-4 md:p-5 bg-gradient-to-br from-emerald-500/10 via-emerald-500/5 to-transparent border border-emerald-500/20 hover:border-emerald-500/40 transition-all duration-300">
+          <p className="text-[10px] font-bold text-emerald-600 uppercase tracking-wider mb-2">Total Ingresos</p>
+          <p className="text-3xl md:text-4xl font-bold text-emerald-600 tracking-tight">{formatCurrency(currentMonth.total)}</p>
+          <div className="mt-2 h-1 w-12 bg-gradient-to-r from-emerald-500 to-emerald-500/50 rounded-full" />
         </div>
 
-        {/* Distribution visualization */}
-        <div className="mb-4 p-3 rounded-xl bg-muted/30 border border-border/30">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-[11px] font-bold text-muted-foreground uppercase">{distributionPercent.toFixed(0)}% asignado</span>
-          </div>
-          <div className="h-2 rounded-full bg-muted overflow-hidden">
-            <div className="h-full rounded-full bg-gradient-to-r from-primary to-primary/70 transition-all duration-500" style={{ width: `${Math.min(distributionPercent, 100)}%` }} />
-          </div>
+        {/* Count */}
+        <div className="group rounded-xl p-4 md:p-5 bg-gradient-to-br from-blue-500/10 via-blue-500/5 to-transparent border border-blue-500/20 hover:border-blue-500/40 transition-all duration-300">
+          <p className="text-[10px] font-bold text-blue-600 uppercase tracking-wider mb-2">N° Registros</p>
+          <p className="text-3xl md:text-4xl font-bold text-blue-600">{currentMonth.count}</p>
+          <div className="mt-2 h-1 w-12 bg-gradient-to-r from-blue-500 to-blue-500/50 rounded-full" />
         </div>
-
-        {/* Money breakdown */}
-        <div className="grid grid-cols-2 gap-3 mb-4">
-          {/* Unassigned */}
-          <div className="p-3 rounded-xl bg-blue-500/5 border border-blue-500/20">
-            <p className="text-[11px] font-bold text-muted-foreground uppercase mb-1">Sin asignar</p>
-            <p className="text-lg font-bold text-blue-500">{formatCurrency(unassignedMoney)}</p>
-          </div>
-
-          {/* Assigned */}
-          <div className="p-3 rounded-xl bg-emerald-500/5 border border-emerald-500/20">
-            <p className="text-[11px] font-bold text-muted-foreground uppercase mb-1">Asignado</p>
-            <p className="text-lg font-bold text-emerald-500">{formatCurrency(assignedMoney)}</p>
-          </div>
-        </div>
-
-        {/* CTA Button */}
-        <Button onClick={onRegisterIncome} size="sm" className="w-full font-semibold text-sm px-6 py-2 rounded-xl">
-          <Plus className="w-4 h-4 mr-1.5" />
-          Registrar ingreso
-        </Button>
       </div>
     </div>
   );

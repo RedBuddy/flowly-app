@@ -80,7 +80,7 @@ export const EditGoalContributionInline = ({ contribution, goalId, onCancel, onS
 
   return (
     <div className="flex items-center gap-3 p-3 rounded-xl bg-muted/50 border-2 border-primary/50">
-      <div className="p-2 rounded-lg flex-shrink-0 bg-primary/10">
+      <div className="p-2 rounded-md flex-shrink-0 bg-primary/10">
         <Edit className="w-4 h-4 text-primary" />
       </div>
 
@@ -114,10 +114,10 @@ export const EditGoalContributionInline = ({ contribution, goalId, onCancel, onS
 
         {/* Action buttons */}
         <div className="flex gap-1 ml-auto">
-          <Button type="submit" size="icon" disabled={isPending} className="bg-primary/50 hover:bg-green-500 flex-shrink-0">
+          <Button type="submit" size="icon" disabled={isPending} className="bg-primary/50 hover:bg-green-500 flex-shrink-0 rounded-md">
             <Check className="w-4 h-4" />
           </Button>
-          <Button type="button" size="icon" variant="ghost" onClick={onCancel} disabled={isPending} className="flex-shrink-0 hover:bg-red-500">
+          <Button type="button" size="icon" variant="ghost" onClick={onCancel} disabled={isPending} className="flex-shrink-0 hover:bg-red-500 rounded-md">
             <X className="w-4 h-4 text-red-500" />
           </Button>
         </div>

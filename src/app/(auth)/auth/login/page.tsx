@@ -52,7 +52,7 @@ export default function LoginPage() {
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="flex flex-col items-center mb-8">
-          <div className="p-3 rounded-2xl  flex items-center gap-3">
+          <div className="p-3 rounded-md  flex items-center gap-3">
             <Wallet className="w-8 h-8 text-accent-foreground" />
             <h1 className="text-2xl font-bold">Flowly</h1>
           </div>
@@ -83,7 +83,7 @@ export default function LoginPage() {
               {errors.password && <div className="text-destructive text-sm">{errors.password.message}</div>}
             </div>
 
-            <Button type="submit" className="w-full" disabled={isPending}>
+            <Button type="submit" className="w-full rounded-md" disabled={isPending}>
               {isPending ? "Iniciando sesión..." : "Iniciar sesión"}
             </Button>
             {errors.root && <div className="text-destructive text-sm">{errors.root.message}</div>}

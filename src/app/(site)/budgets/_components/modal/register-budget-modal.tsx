@@ -63,13 +63,13 @@ export function RegisterBudgetModal({ isOpen, onClose }: RegisterBudgetModalProp
       {/* Modal */}
       <div className="relative bg-card text-card-foreground rounded-xl p-8 w-full max-w-md shadow-lg">
         {/* Close button */}
-        <button onClick={onClose} className="absolute top-4 right-4 p-2 rounded-xl hover:bg-accent transition-colors cursor-pointer">
+        <button onClick={onClose} className="absolute top-4 right-4 p-2 rounded-md hover:bg-accent transition-colors cursor-pointer">
           <X className="w-5 h-5 text-muted-foreground" />
         </button>
 
         {/* Header */}
         <div className="flex items-center gap-4 mb-6">
-          <div className="p-4 rounded-2xl bg-accent">
+          <div className="p-4 rounded-md bg-accent">
             <PiggyBank className="w-8 h-8 text-accent-foreground" />
           </div>
           <div>
@@ -101,13 +101,13 @@ export function RegisterBudgetModal({ isOpen, onClose }: RegisterBudgetModalProp
             <label className="block text-sm font-medium mb-2">Monto a asignar</label>
             <div className="relative">
               <span className="absolute left-4 top-1/2 -translate-y-1/2 text-2xl font-medium text-muted-foreground">$</span>
-              <Input {...register("totalAssigned", { valueAsNumber: true })} type="number" inputMode="decimal" placeholder="0" className="pl-10 pr-4 py-4 text-3xl font-bold rounded-2xl" step="0.01" />
+              <Input {...register("totalAssigned", { valueAsNumber: true })} type="number" inputMode="decimal" placeholder="0" className="pl-10 pr-4 py-4 text-3xl font-bold rounded-md" step="0.01" />
             </div>
             {errors.totalAssigned && <p className="text-destructive text-sm">{errors.totalAssigned.message}</p>}
           </div>
 
           {/* Submit button */}
-          <Button type="submit" className="w-full py-4 rounded-xl" disabled={isPending}>
+          <Button type="submit" className="w-full py-4 rounded-md" disabled={isPending}>
             <Plus className="w-5 h-5 mr-2" />
             Crear presupuesto
           </Button>

@@ -35,7 +35,7 @@ export function DebtCard({ name, totalDebt, remaining, dueDate, minimumPayment, 
   const isUrgent = priority === "high";
 
   return (
-    <div className={cn("relative bg-card rounded-2xl p-5 shadow-soft border overflow-hidden hover:shadow-card transition-all duration-300 animate-scale-in", isUrgent ? "border-destructive/30" : "border-border/50")}>
+    <div className={cn("relative bg-card rounded-xl p-5 shadow-soft border overflow-hidden hover:shadow-card transition-all duration-300 animate-scale-in", isUrgent ? "border-destructive/30" : "border-border/50")}>
       {/* Priority accent bar */}
       <div className={cn("absolute top-0 left-0 right-0 h-1", styles.accent)} />
 
@@ -85,7 +85,7 @@ export function DebtCard({ name, totalDebt, remaining, dueDate, minimumPayment, 
       <Button
         onClick={onPay}
         className={cn(
-          "w-full rounded-xl font-semibold transition-all hover:scale-[1.02] active:scale-[0.98]",
+          "w-full rounded-md font-semibold transition-all hover:scale-[1.02] active:scale-[0.98]",
           isUrgent ? "bg-destructive hover:bg-destructive/90 text-destructive-foreground" : "bg-primary hover:bg-primary/90 text-primary-foreground"
         )}
       >

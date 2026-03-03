@@ -16,13 +16,13 @@ export const RegisterGoalModal = ({ isOpen, onClose }: RegisterGoalModalProps) =
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-foreground/20 backdrop-blur-sm animate-fade-in" onClick={() => onClose()} />
-      <div className="relative bg-card rounded-2xl p-8 w-full max-w-md shadow-card animate-scale-in">
-        <button onClick={() => onClose()} className="absolute top-4 right-4 p-2 rounded-xl hover:bg-muted transition-colors cursor-pointer">
+      <div className="relative bg-card rounded-xl p-8 w-full max-w-md shadow-card animate-scale-in">
+        <button onClick={() => onClose()} className="absolute top-4 right-4 p-2 rounded-md hover:bg-muted transition-colors cursor-pointer">
           <X className="w-5 h-5 text-muted-foreground" />
         </button>
 
         <div className="flex items-center gap-4 mb-6">
-          <div className="p-4 rounded-2xl bg-primary/10">
+          <div className="p-4 rounded-md bg-primary/10">
             <Target className="w-8 h-8 text-primary" />
           </div>
           <div>
@@ -47,7 +47,7 @@ export const RegisterGoalModal = ({ isOpen, onClose }: RegisterGoalModalProps) =
             <label className="block text-sm font-medium text-foreground mb-2">Fecha límite (opcional)</label>
             <Input value={newGoal.deadline} onChange={(e) => setNewGoal({ ...newGoal, deadline: e.target.value })} placeholder="ej. Dic 2025" className="rounded-xl py-2" />
           </div>
-          <Button type="button" className="w-full rounded-xl bg-primary text-primary-foreground font-semibold" onClick={() => onClose()}>
+          <Button type="button" className="w-full rounded-md bg-primary text-primary-foreground font-semibold" onClick={() => onClose()}>
             <Plus className="w-5 h-5 mr-2" />
             Crear meta
           </Button>

@@ -14,17 +14,9 @@ export async function CreateIncomeAction(data: IncomeFormData): Promise<ActionRe
       return { ok: false, error: "Usuario no autenticado" };
     }
 
-    const [income] = await prisma.$transaction([
-      prisma.income.create({
-        data: { ...data, userId }
-      }),
-      prisma.user.update({
-        where: { id: userId },
-        data: {
-          unassignedMoney: { increment: data.amount }
-        }
-      })
-    ])
+    const income = await prisma.income.create({
+      data: { ...data, userId }
+    });
 
     return { ok: true, result: income };
   } catch (error) {

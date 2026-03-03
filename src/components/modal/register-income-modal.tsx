@@ -60,13 +60,13 @@ export function RegisterIncomeModal({ isOpen, onClose }: RegisterIncomeModalProp
       {/* Modal */}
       <div className="relative bg-card text-card-foreground rounded-xl p-8 w-full max-w-md shadow-lg">
         {/* Close button */}
-        <Button variant="ghost" size="icon" onClick={onClose} className="absolute top-4 right-4">
+        <Button variant="ghost" size="icon" onClick={onClose} className="absolute top-4 right-4 rounded-md">
           <X className="w-5 h-5 text-muted-foreground" />
         </Button>
 
         {/* Header */}
         <div className="flex items-center gap-4 mb-6">
-          <div className="p-4 rounded-2xl bg-accent">
+          <div className="p-4 rounded-md bg-accent">
             <Wallet className="w-8 h-8 text-accent-foreground" />
           </div>
           <div>
@@ -114,7 +114,7 @@ export function RegisterIncomeModal({ isOpen, onClose }: RegisterIncomeModalProp
           </div>
 
           {/* Submit button */}
-          <Button type="submit" className="w-full rounded-xl" disabled={isPending}>
+          <Button type="submit" className="w-full rounded-md" disabled={isPending}>
             <Plus className="w-5 h-5 mr-2" />
             Agregar ingreso
           </Button>

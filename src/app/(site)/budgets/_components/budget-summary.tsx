@@ -32,7 +32,7 @@ export const BudgetSummary = () => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mx-4 ">
       {/* Total asignado */}
-      <div className="bg-card rounded-2xl overflow-hidden shadow-soft border border-border/50 hover:shadow-card transition-all duration-300">
+      <div className="bg-card rounded-xl overflow-hidden shadow-soft border border-border/50 hover:shadow-card transition-all duration-300">
         <div className="h-1 bg-blue-500" />
         <div className="px-4 py-3 flex items-center gap-3">
           <div className="p-2 rounded-xl bg-blue-500/10 flex-shrink-0">
@@ -49,7 +49,7 @@ export const BudgetSummary = () => {
       </div>
 
       {/* Total gastado */}
-      <div className="bg-card rounded-2xl overflow-hidden shadow-soft border border-border/50 hover:shadow-card transition-all duration-300">
+      <div className="bg-card rounded-xl overflow-hidden shadow-soft border border-border/50 hover:shadow-card transition-all duration-300">
         <div className="h-1 bg-orange-500" />
         <div className="px-4 py-3 flex items-center gap-3">
           <div className="p-2 rounded-xl bg-orange-500/10 flex-shrink-0">
@@ -67,7 +67,7 @@ export const BudgetSummary = () => {
       </div>
 
       {/* Disponible */}
-      <div className="bg-card rounded-2xl overflow-hidden shadow-soft border border-border/50 hover:shadow-card transition-all duration-300">
+      <div className="bg-card rounded-xl overflow-hidden shadow-soft border border-border/50 hover:shadow-card transition-all duration-300">
         <div className="h-1 bg-emerald-500" />
         <div className="px-4 py-3 flex items-center gap-3">
           <div className="p-2 rounded-xl bg-emerald-500/10 flex-shrink-0">

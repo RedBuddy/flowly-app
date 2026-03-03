@@ -91,11 +91,11 @@ export const BudgetAssignModal = () => {
 
           <DialogFooter className="flex w-full">
             <DialogClose asChild>
-              <Button variant="outline" className="rounded-xl flex-1" onClick={() => switchAssignModal()}>
+              <Button variant="outline" className="rounded-md flex-1" onClick={() => switchAssignModal()}>
                 Cancelar
               </Button>
             </DialogClose>
-            <Button type="submit" className="rounded-xl flex-1" disabled={isPending}>
+            <Button type="submit" className="rounded-md flex-1" disabled={isPending}>
               Asignar
             </Button>
           </DialogFooter>

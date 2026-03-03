@@ -15,7 +15,7 @@ export const GoalsSummary = () => {
   const overallProgress = totalTarget > 0 ? (totalSaved / totalTarget) * 100 : 0;
 
   return (
-    <div className="bg-card rounded-2xl p-6 shadow-card border border-border/50 mb-8 overflow-hidden relative">
+    <div className="bg-card rounded-xl p-6 shadow-card border border-border/50 mb-8 overflow-hidden relative">
       <div className="absolute -top-10 -right-10 w-32 h-32 rounded-full bg-primary/10 animate-pulse" />
       <div className="relative z-10">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
@@ -40,7 +40,7 @@ export const GoalsSummary = () => {
                 <span className="text-xl font-bold text-primary">{Math.round(overallProgress)}%</span>
               </div>
             </div>
-            <Button onClick={() => switchCreateGoalModal(true)} className="rounded-xl bg-primary text-primary-foreground">
+            <Button onClick={() => switchCreateGoalModal(true)} className="rounded-md bg-primary text-primary-foreground">
               <Plus className="w-4 h-4 mr-2" />
               Nueva meta
             </Button>

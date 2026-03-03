@@ -15,7 +15,7 @@ export const useDebts = () => {
   });
 };
 
-export const useLatestDebts = (take: number = 4) => {
+export const useLatestDebts = (take: number = 3) => {
   return useQuery({
     queryKey: ["latestDebts"],
     queryFn: () => getLatestDebts(take),

@@ -1,21 +1,17 @@
+"use client";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { formatCurrency } from "@/helpers/currency-formatter";
+import { useGoals } from "@/hooks/useGoal";
+import { useGoalModalsStore } from "@/stores/goal-modals.store";
 
-// Mock data para desarrollo
-const mockGoals = [
-  { id: 1, name: "Vacaciones", target: 80000, current: 32000 },
-  { id: 2, name: "Fondo emergencia", target: 150000, current: 95000 },
-  { id: 3, name: "MacBook", target: 45000, current: 18000 },
-];
+export const GoalsSummary = () => {
+  const { data } = useGoals();
+  const { switchCreateGoalModal } = useGoalModalsStore();
+  const goals = data?.ok ? data.result ?? [] : [];
 
-interface GoalsSummaryProps {
-  setModalState: (isOpen: boolean) => void;
-}
-
-export const GoalsSummary = ({ setModalState }: GoalsSummaryProps) => {
-  const totalTarget = mockGoals.reduce((acc, g) => acc + g.target, 0);
-  const totalSaved = mockGoals.reduce((acc, g) => acc + g.current, 0);
+  const totalTarget = goals.reduce((acc, g) => acc + g.target, 0);
+  const totalSaved = goals.reduce((acc, g) => acc + g.current, 0);
   const overallProgress = totalTarget > 0 ? (totalSaved / totalTarget) * 100 : 0;
 
   return (
@@ -44,7 +40,7 @@ export const GoalsSummary = ({ setModalState }: GoalsSummaryProps) => {
                 <span className="text-xl font-bold text-primary">{Math.round(overallProgress)}%</span>
               </div>
             </div>
-            <Button onClick={() => setModalState(true)} className="rounded-xl bg-primary text-primary-foreground">
+            <Button onClick={() => switchCreateGoalModal(true)} className="rounded-xl bg-primary text-primary-foreground">
               <Plus className="w-4 h-4 mr-2" />
               Nueva meta
             </Button>

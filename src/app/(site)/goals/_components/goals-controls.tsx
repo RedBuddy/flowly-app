@@ -1,16 +1,16 @@
 "use client";
-import { useState } from "react";
 import { GoalsSummary } from "./goals-summary";
-import { RegisterGoalModal } from "./modal/register-goal-modal";
+import { CreateGoalModal } from "./modal/create-goal-modal";
+import { ContributeGoalModal } from "./modal/contribute-goal-modal";
+import { GoalHistoryModal } from "./modal/goal-history-modal";
 
 export const GoalsControls = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
   return (
     <>
-      <GoalsSummary setModalState={setIsModalOpen} />
-
-      <RegisterGoalModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      <GoalsSummary />
+      <CreateGoalModal />
+      <ContributeGoalModal />
+      <GoalHistoryModal />
     </>
   );
 };

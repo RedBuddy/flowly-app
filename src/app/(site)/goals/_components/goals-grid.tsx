@@ -1,19 +1,27 @@
-import { ProjectCard } from "@/components/ProjectCard";
-
-const allGoals = [
-  { id: 1, name: "Vacaciones Europa", target: 80000, current: 32000, deadline: "Dic 2025" },
-  { id: 2, name: "Fondo de emergencia", target: 150000, current: 95000, deadline: "Mar 2025" },
-  { id: 3, name: "MacBook Pro", target: 45000, current: 18000, deadline: "Jun 2025" },
-  { id: 4, name: "Curso de inglés", target: 25000, current: 25000, deadline: "Completado" },
-  { id: 5, name: "Boda", target: 200000, current: 45000, deadline: "Dic 2026" },
-];
+"use client";
+import { CustomLoading } from "@/components/shared/custom-loading";
+import { GoalCard } from "./goal-card";
+import { useGoals } from "@/hooks/useGoal";
 
 export const GoalsGrid = () => {
+  const { data, isLoading } = useGoals();
+  const goals = data?.ok ? data.result ?? [] : [];
+
+  if (isLoading) {
+    return <CustomLoading />;
+  }
+
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-      {allGoals.map((goal) => (
-        <ProjectCard key={goal.id} name={goal.name} target={goal.target} current={goal.current} deadline={goal.deadline} />
-      ))}
-    </div>
+    <>
+      {goals.length === 0 ? (
+        <p className="text-gray-500 text-center py-8">No hay metas para mostrar</p>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {goals.map((goal) => (
+            <GoalCard key={goal.id} {...goal} />
+          ))}
+        </div>
+      )}
+    </>
   );
 };

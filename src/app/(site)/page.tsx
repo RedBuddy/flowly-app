@@ -1,7 +1,8 @@
 import { AppHeader } from "@/components/landing/app-header";
-import { BudgetSlider, HeroSection, ProjectSlider } from "@/components/landing";
+import { BudgetSlider, HeroSection } from "@/components/landing";
 import { DebtSlider } from "@/components/landing/debts-slider";
 import { ModalAutoCloser } from "@/components/modal/modal-auto-closer";
+import { GoalSlider } from "@/components/landing/goals-slider";
 
 export default function HomePage() {
   return (
@@ -11,7 +12,7 @@ export default function HomePage() {
         {/* contenido del dashboard */}
         <HeroSection />
         <BudgetSlider />
-        <ProjectSlider />
+        <GoalSlider />
         <DebtSlider />
         {/* Helper */}
         <ModalAutoCloser />

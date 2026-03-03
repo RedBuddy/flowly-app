@@ -2,6 +2,7 @@ import { createBudgetTransaction } from "@/actions/budgets/create-budget-transac
 import { CreateBudget } from "@/actions/budgets/create-budget";
 import { deleteBudget } from "@/actions/budgets/delete-budget";
 import { deleteBudgetTransaction } from "@/actions/budgets/delete-budget-transaction";
+import { updateBudgetTransaction } from "@/actions/budgets/update-budget-transaction";
 import { getBudgetTransactions } from "@/actions/budgets/get-budget-transactions";
 import { getBudgets } from "@/actions/budgets/get-budgets";
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -119,6 +120,39 @@ export const useDeleteBudgetTransaction = (budgetId: string) => {
         return {
           ...old,
           result: old.result.filter((t: any) => t.id !== variables.transactionId),
+        };
+      });
+
+      // Invalidar la query de presupuestos para actualizar los totales
+      queryClient.invalidateQueries({
+        queryKey: ["budgets"],
+      });
+
+      queryClient.invalidateQueries({
+        queryKey: ["latestBudgets"],
+      });
+
+      queryClient.invalidateQueries({
+        queryKey: ["balanceSummary"],
+      });
+    },
+  });
+};
+
+export const useUpdateBudgetTransaction = (budgetId: string) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (data: { transactionId: string; type: string; amountDifference: number; newAmount: number; description: string }) => updateBudgetTransaction(budgetId, data),
+    onSuccess: (response, variables) => {
+      if (!response.ok) return;
+
+      // Actualiza la transacción del cache
+      queryClient.setQueryData(["budgetTransactions", budgetId], (old: any) => {
+        if (!old?.result) return old;
+        return {
+          ...old,
+          result: old.result.map((t: any) => (t.id === variables.transactionId ? { ...t, description: variables.description, amount: variables.newAmount } : t)),
         };
       });
 

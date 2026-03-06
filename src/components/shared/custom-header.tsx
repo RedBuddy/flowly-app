@@ -8,7 +8,7 @@ interface Props {
 
 export const CustomHeader = ({ title, icon }: Props) => {
   return (
-    <header className="sticky top-0 z-40 glass border-b border-border/50">
+    <header className="top-0 z-40 glass border-b border-border/50">
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center gap-4">
           <Link href="/" className="p-2 rounded-xl hover:bg-muted transition-colors">

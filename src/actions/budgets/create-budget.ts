@@ -17,20 +17,20 @@ export async function CreateBudget(data: BudgetFormData): Promise<ActionResponse
     // Todo en una transacción: validación + creación
     const budget = await prisma.$transaction(async (tx) => {
       // Obtener el usuario y validar dinero disponible
-      const user = await tx.user.findUnique({
-        where: { id: userId },
-        select: { unassignedMoney: true },
-      });
+      // const user = await tx.user.findUnique({
+      //   where: { id: userId },
+      //   select: { unassignedMoney: true },
+      // });
 
-      if (!user) {
-        throw new Error("Usuario no encontrado");
-      }
+      // if (!user) {
+      //   throw new Error("Usuario no encontrado");
+      // }
 
-      if (data.totalAssigned > user.unassignedMoney) {
-        throw new Error(
-          `No tienes suficiente dinero disponible. Tienes $${user.unassignedMoney}, necesitas $${data.totalAssigned}`
-        );
-      }
+      // if (data.totalAssigned > user.unassignedMoney) {
+      //   throw new Error(
+      //     `No tienes suficiente dinero disponible. Tienes $${user.unassignedMoney}, necesitas $${data.totalAssigned}`
+      //   );
+      // }
 
       // Crear budget
       const newBudget = await tx.budget.create({
@@ -38,14 +38,14 @@ export async function CreateBudget(data: BudgetFormData): Promise<ActionResponse
       });
 
       // Restar del unassignedMoney
-      await tx.user.update({
-        where: { id: userId },
-        data: {
-          unassignedMoney: {
-            decrement: data.totalAssigned,
-          },
-        },
-      });
+      // await tx.user.update({
+      //   where: { id: userId },
+      //   data: {
+      //     unassignedMoney: {
+      //       decrement: data.totalAssigned,
+      //     },
+      //   },
+      // });
 
       return newBudget;
     });
